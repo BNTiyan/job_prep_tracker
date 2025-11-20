@@ -3,6 +3,7 @@ let state = {
     currentDay: 1,
     completedTasks: new Set(),
     customTopics: [],
+    reviewNotes: [],
     startDate: getTodayDate(), // Start from today
     practiceProblems: null, // Will load from YAML
     learningModel: {
@@ -88,7 +89,8 @@ function loadState() {
         state = {
             ...state, // Keep default values
             ...parsed,
-            completedTasks: new Set(parsed.completedTasks || [])
+            completedTasks: new Set(parsed.completedTasks || []),
+            reviewNotes: parsed.reviewNotes || []
         };
         
         // If no start date set, use today
@@ -462,6 +464,7 @@ function renderTasks() {
     
     if (!dayPlan) {
         container.innerHTML = '<div class="task-category"><p>No tasks planned for this day yet. Add custom topics!</p></div>';
+        renderNotesSection();
         return;
     }
 
@@ -484,6 +487,8 @@ function renderTasks() {
         const uncompletedCard = createUncompletedCard(uncompletedPrevious);
         container.appendChild(uncompletedCard);
     }
+
+    renderNotesSection();
 }
 
 // Get uncompleted tasks from previous days
@@ -619,6 +624,109 @@ function createTaskElement(task, taskId) {
     `;
 
     return taskDiv;
+}
+
+// Render notes / review section
+function renderNotesSection() {
+    const section = document.getElementById('notesSection');
+    if (!section) return;
+
+    if (!Array.isArray(state.reviewNotes)) {
+        state.reviewNotes = [];
+    }
+
+    const notes = [...state.reviewNotes].sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+    const dayOptions = Array.from({ length: 60 }, (_, i) => {
+        const dayNumber = i + 1;
+        const selected = dayNumber === state.currentDay ? 'selected' : '';
+        return `<option value="${dayNumber}" ${selected}>Day ${dayNumber}</option>`;
+    }).join('');
+
+    const notesList = notes.length
+        ? notes.map(note => `
+            <div class="note-card">
+                <div class="note-card-header">
+                    <span class="note-day">Day ${note.day}</span>
+                    <span class="note-date">${formatNoteDate(note.createdAt)}</span>
+                    <button class="note-delete" data-note-id="${note.id}" aria-label="Delete note">✕</button>
+                </div>
+                <p>${escapeHtml(note.text)}</p>
+            </div>
+        `).join('')
+        : `<p class="notes-empty">No review notes yet. Capture tricky tasks to revisit later.</p>`;
+
+    section.innerHTML = `
+        <div class="notes-header">
+            <h2>🔖 Review Notes</h2>
+            <p>Keep track of follow-ups, tricky tasks, or resources to review.</p>
+        </div>
+        <form id="noteForm" class="note-form">
+            <div class="note-form-row">
+                <div class="form-group note-day-select">
+                    <label for="noteDay">Day</label>
+                    <select id="noteDay">${dayOptions}</select>
+                </div>
+                <div class="form-group flex-grow">
+                    <label for="noteText">Note</label>
+                    <textarea id="noteText" rows="2" placeholder="Example: Revisit DP derivation for LIS" required></textarea>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Note</button>
+        </form>
+        <div class="notes-list">
+            ${notesList}
+        </div>
+    `;
+
+    const noteForm = document.getElementById('noteForm');
+    if (noteForm) {
+        noteForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const noteTextEl = document.getElementById('noteText');
+            const noteDayEl = document.getElementById('noteDay');
+            const noteText = noteTextEl.value.trim();
+            if (!noteText) return;
+
+            const note = {
+                id: 'note-' + Date.now(),
+                day: Math.min(Math.max(parseInt(noteDayEl.value, 10) || state.currentDay, 1), 60),
+                text: noteText,
+                createdAt: new Date().toISOString()
+            };
+
+            state.reviewNotes.push(note);
+            noteTextEl.value = '';
+            saveState();
+            renderNotesSection();
+        });
+    }
+
+    section.querySelectorAll('.note-delete').forEach(button => {
+        button.addEventListener('click', () => {
+            const noteId = button.dataset.noteId;
+            state.reviewNotes = state.reviewNotes.filter(note => note.id !== noteId);
+            saveState();
+            renderNotesSection();
+        });
+    });
+}
+
+function formatNoteDate(dateString) {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    if (Number.isNaN(date.getTime())) return '';
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function escapeHtml(text = '') {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, m => map[m]);
 }
 
 // Get category icon
@@ -972,12 +1080,14 @@ function setupEventListeners() {
                 currentDay: 1,
                 completedTasks: new Set(),
                 customTopics: [],
-                startDate: new Date().toISOString().split('T')[0]
+                reviewNotes: [],
+                startDate: getTodayDate()
             };
             saveState();
             renderTasks();
             updateProgress();
             updateDateDisplay();
+            renderNotesSection();
         }
     });
 }
