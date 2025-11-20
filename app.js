@@ -4,7 +4,22 @@ let state = {
     completedTasks: new Set(),
     customTopics: [],
     startDate: new Date().toISOString().split('T')[0],
-    practiceProblems: null // Will load from YAML
+    practiceProblems: null, // Will load from YAML
+    learningModel: {
+        performanceHistory: [], // Track daily performance
+        categoryStrengths: {}, // Track strength in each category
+        categoryWeaknesses: {}, // Track areas needing improvement
+        preferences: {
+            averageStudyTime: 120, // minutes
+            preferredCategories: [],
+            difficultTopics: []
+        },
+        adaptations: {
+            suggestedFocus: [],
+            recommendedReview: [],
+            paceAdjustment: 'normal' // 'slower', 'normal', 'faster'
+        }
+    }
 };
 
 // Load practice problems from YAML
@@ -45,6 +60,180 @@ function saveState() {
         ...state,
         completedTasks: Array.from(state.completedTasks)
     }));
+    
+    // Update learning model after each save
+    updateLearningModel();
+}
+
+// Update learning model based on daily activities
+function updateLearningModel() {
+    const today = new Date().toISOString().split('T')[0];
+    const dayPlan = preparationPlan.find(p => p.day === state.currentDay);
+    
+    if (!dayPlan) return;
+    
+    // Calculate today's performance
+    const todayTasks = dayPlan.tasks.map((_, index) => `day-${state.currentDay}-task-${index}`);
+    const completedToday = todayTasks.filter(taskId => state.completedTasks.has(taskId)).length;
+    const completionRate = todayTasks.length > 0 ? (completedToday / todayTasks.length) * 100 : 0;
+    
+    // Calculate time spent (estimate based on completed tasks)
+    const timeSpent = dayPlan.tasks
+        .filter((_, index) => state.completedTasks.has(`day-${state.currentDay}-task-${index}`))
+        .reduce((sum, task) => sum + task.duration, 0);
+    
+    // Record daily performance
+    const dailyPerformance = {
+        day: state.currentDay,
+        date: today,
+        category: dayPlan.category,
+        completionRate: completionRate,
+        tasksCompleted: completedToday,
+        totalTasks: todayTasks.length,
+        timeSpent: timeSpent,
+        timestamp: Date.now()
+    };
+    
+    // Update performance history (keep last 60 days)
+    state.learningModel.performanceHistory = [
+        ...state.learningModel.performanceHistory.filter(p => p.day !== state.currentDay),
+        dailyPerformance
+    ].slice(-60);
+    
+    // Update category strengths and weaknesses
+    updateCategoryInsights(dayPlan.category, completionRate);
+    
+    // Update preferences
+    updatePreferences(timeSpent, dayPlan.category);
+    
+    // Generate adaptive recommendations
+    generateAdaptations();
+}
+
+// Update category-specific insights
+function updateCategoryInsights(category, completionRate) {
+    if (!state.learningModel.categoryStrengths[category]) {
+        state.learningModel.categoryStrengths[category] = [];
+    }
+    
+    state.learningModel.categoryStrengths[category].push(completionRate);
+    
+    // Keep only last 5 entries per category
+    if (state.learningModel.categoryStrengths[category].length > 5) {
+        state.learningModel.categoryStrengths[category].shift();
+    }
+    
+    // Calculate average performance for this category
+    const avgPerformance = state.learningModel.categoryStrengths[category].reduce((a, b) => a + b, 0) / 
+                           state.learningModel.categoryStrengths[category].length;
+    
+    // Identify weaknesses (< 70% completion rate)
+    if (avgPerformance < 70) {
+        if (!state.learningModel.categoryWeaknesses[category]) {
+            state.learningModel.categoryWeaknesses[category] = avgPerformance;
+        }
+    } else {
+        delete state.learningModel.categoryWeaknesses[category];
+    }
+}
+
+// Update user preferences based on behavior
+function updatePreferences(timeSpent, category) {
+    // Update average study time
+    const recentTime = state.learningModel.performanceHistory.slice(-7)
+        .reduce((sum, p) => sum + p.timeSpent, 0);
+    const recentDays = state.learningModel.performanceHistory.slice(-7).length;
+    
+    if (recentDays > 0) {
+        state.learningModel.preferences.averageStudyTime = Math.round(recentTime / recentDays);
+    }
+    
+    // Track preferred categories (high completion rates)
+    const categoryPerf = state.learningModel.categoryStrengths[category] || [];
+    const avgCategoryPerf = categoryPerf.reduce((a, b) => a + b, 0) / (categoryPerf.length || 1);
+    
+    if (avgCategoryPerf >= 80) {
+        if (!state.learningModel.preferences.preferredCategories.includes(category)) {
+            state.learningModel.preferences.preferredCategories.push(category);
+        }
+    }
+    
+    // Track difficult topics
+    if (avgCategoryPerf < 60) {
+        if (!state.learningModel.preferences.difficultTopics.includes(category)) {
+            state.learningModel.preferences.difficultTopics.push(category);
+        }
+    } else {
+        state.learningModel.preferences.difficultTopics = 
+            state.learningModel.preferences.difficultTopics.filter(t => t !== category);
+    }
+}
+
+// Generate adaptive recommendations
+function generateAdaptations() {
+    const adaptations = {
+        suggestedFocus: [],
+        recommendedReview: [],
+        paceAdjustment: 'normal'
+    };
+    
+    // Analyze recent performance (last 7 days)
+    const recentPerformance = state.learningModel.performanceHistory.slice(-7);
+    const avgCompletionRate = recentPerformance.reduce((sum, p) => sum + p.completionRate, 0) / 
+                               (recentPerformance.length || 1);
+    
+    // Pace adjustment
+    if (avgCompletionRate >= 90) {
+        adaptations.paceAdjustment = 'faster';
+        adaptations.suggestedFocus.push('You\'re doing great! Consider adding advanced topics or harder problems.');
+    } else if (avgCompletionRate < 60) {
+        adaptations.paceAdjustment = 'slower';
+        adaptations.suggestedFocus.push('Consider spending more time on fundamentals before moving forward.');
+    }
+    
+    // Identify topics needing review
+    const weakCategories = Object.keys(state.learningModel.categoryWeaknesses)
+        .sort((a, b) => state.learningModel.categoryWeaknesses[a] - state.learningModel.categoryWeaknesses[b])
+        .slice(0, 3);
+    
+    if (weakCategories.length > 0) {
+        adaptations.recommendedReview = weakCategories;
+        adaptations.suggestedFocus.push(
+            `Focus on: ${weakCategories.join(', ')}. Your completion rate in these areas is below 70%.`
+        );
+    }
+    
+    // Suggest balance
+    if (state.learningModel.preferences.difficultTopics.length > 3) {
+        adaptations.suggestedFocus.push(
+            'Mix difficult topics with areas you\'re strong in to maintain motivation.'
+        );
+    }
+    
+    // Time management insights
+    const avgTime = state.learningModel.preferences.averageStudyTime;
+    if (avgTime < 90) {
+        adaptations.suggestedFocus.push(
+            `You're averaging ${avgTime} min/day. Try to reach the 2-hour (120 min) daily goal for optimal prep.`
+        );
+    } else if (avgTime >= 120) {
+        adaptations.suggestedFocus.push(
+            'Great consistency! You\'re meeting your 2-hour daily target. Keep it up! 🎉'
+        );
+    }
+    
+    // Suggest coding practice based on gaps
+    const codingDays = recentPerformance.filter(p => 
+        p.category.includes('Coding') || p.category.includes('Algorithms')
+    ).length;
+    
+    if (codingDays === 0 && recentPerformance.length >= 5) {
+        adaptations.suggestedFocus.push(
+            'You haven\'t practiced coding in a while. Try solving 2-3 LeetCode problems today.'
+        );
+    }
+    
+    state.learningModel.adaptations = adaptations;
 }
 
 // Initialize app
@@ -54,7 +243,97 @@ async function init() {
     renderTasks();
     updateProgress();
     updateDateDisplay();
+    renderInsights(); // Show AI-powered insights
     setupEventListeners();
+}
+
+// Render AI-powered insights
+function renderInsights() {
+    const container = document.getElementById('insightsContainer');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    const adaptations = state.learningModel.adaptations;
+    const preferences = state.learningModel.preferences;
+    const recentPerformance = state.learningModel.performanceHistory.slice(-7);
+    
+    if (recentPerformance.length === 0) {
+        container.innerHTML = `
+            <div class="insight-card">
+                <h3>🚀 Welcome to Your AI-Powered Study Plan!</h3>
+                <p>As you complete tasks, I'll learn your strengths and adapt recommendations.</p>
+                <p>Start completing today's tasks to see personalized insights!</p>
+            </div>
+        `;
+        return;
+    }
+    
+    // Performance summary
+    const avgCompletion = recentPerformance.reduce((sum, p) => sum + p.completionRate, 0) / recentPerformance.length;
+    const totalTime = recentPerformance.reduce((sum, p) => sum + p.timeSpent, 0);
+    
+    let performanceEmoji = '📈';
+    if (avgCompletion >= 90) performanceEmoji = '🔥';
+    else if (avgCompletion >= 70) performanceEmoji = '💪';
+    else if (avgCompletion < 50) performanceEmoji = '⚠️';
+    
+    container.innerHTML = `
+        <div class="insight-card">
+            <h3>${performanceEmoji} Your Learning Progress (Last 7 Days)</h3>
+            <div class="insight-stats">
+                <div class="insight-stat">
+                    <span class="insight-value">${Math.round(avgCompletion)}%</span>
+                    <span class="insight-label">Avg Completion</span>
+                </div>
+                <div class="insight-stat">
+                    <span class="insight-value">${Math.round(totalTime / recentPerformance.length)}m</span>
+                    <span class="insight-label">Avg Daily Time</span>
+                </div>
+                <div class="insight-stat">
+                    <span class="insight-value">${recentPerformance.length}</span>
+                    <span class="insight-label">Active Days</span>
+                </div>
+            </div>
+        </div>
+        
+        ${adaptations.suggestedFocus.length > 0 ? `
+        <div class="insight-card">
+            <h3>💡 AI Recommendations</h3>
+            <ul class="insight-list">
+                ${adaptations.suggestedFocus.map(suggestion => `<li>${suggestion}</li>`).join('')}
+            </ul>
+        </div>
+        ` : ''}
+        
+        ${adaptations.recommendedReview.length > 0 ? `
+        <div class="insight-card insight-warning">
+            <h3>📚 Topics to Review</h3>
+            <p>Based on your performance, focus on:</p>
+            <ul class="insight-list">
+                ${adaptations.recommendedReview.map(topic => `<li><strong>${topic}</strong></li>`).join('')}
+            </ul>
+        </div>
+        ` : ''}
+        
+        ${preferences.preferredCategories.length > 0 ? `
+        <div class="insight-card insight-success">
+            <h3>⭐ Your Strengths</h3>
+            <p>You're excelling in: ${preferences.preferredCategories.join(', ')}</p>
+        </div>
+        ` : ''}
+        
+        <div class="insight-card">
+            <h3>📊 Pace: ${adaptations.paceAdjustment === 'faster' ? '🚀 Ahead' : 
+                            adaptations.paceAdjustment === 'slower' ? '🐢 Take Your Time' : 
+                            '✅ On Track'}</h3>
+            <p>${adaptations.paceAdjustment === 'faster' ? 
+                'You\'re ahead of schedule! Consider tackling more challenging problems.' :
+                adaptations.paceAdjustment === 'slower' ?
+                'No rush! Focus on understanding concepts deeply before moving forward.' :
+                'You\'re progressing at a steady pace. Keep up the good work!'}</p>
+        </div>
+    `;
 }
 
 // Render tasks for current day
@@ -385,6 +664,7 @@ function setupEventListeners() {
             renderTasks();
             updateProgress();
             updateDateDisplay();
+            renderInsights();
         }
     });
 
@@ -395,6 +675,7 @@ function setupEventListeners() {
             renderTasks();
             updateProgress();
             updateDateDisplay();
+            renderInsights();
         }
     });
 
@@ -410,6 +691,7 @@ function setupEventListeners() {
             saveState();
             renderTasks();
             updateProgress();
+            renderInsights(); // Update AI insights when tasks change
         }
     });
 
@@ -468,6 +750,23 @@ function setupEventListeners() {
         designModal.style.display = 'none';
     };
 
+    // Analytics modal
+    const analyticsModal = document.getElementById('analyticsModal');
+    const viewAnalyticsBtn = document.getElementById('viewAnalyticsBtn');
+    const closeAnalytics = document.querySelector('.close-analytics');
+
+    viewAnalyticsBtn.onclick = () => {
+        renderAnalytics();
+        analyticsModal.style.display = 'block';
+    };
+
+    closeAnalytics.onclick = () => {
+        analyticsModal.style.display = 'none';
+    };
+
+    // Export data button
+    document.getElementById('exportDataBtn').addEventListener('click', exportLearningData);
+
     window.onclick = (event) => {
         if (event.target == customModal) {
             customModal.style.display = 'none';
@@ -480,6 +779,9 @@ function setupEventListeners() {
         }
         if (event.target == designModal) {
             designModal.style.display = 'none';
+        }
+        if (event.target == analyticsModal) {
+            analyticsModal.style.display = 'none';
         }
     };
 
@@ -671,6 +973,191 @@ function renderSystemDesignProblems() {
         
         container.appendChild(card);
     });
+}
+
+// Render detailed analytics
+function renderAnalytics() {
+    const container = document.getElementById('analyticsContent');
+    container.innerHTML = '';
+
+    const performanceHistory = state.learningModel.performanceHistory;
+    const categoryStrengths = state.learningModel.categoryStrengths;
+    const preferences = state.learningModel.preferences;
+    const adaptations = state.learningModel.adaptations;
+
+    if (performanceHistory.length === 0) {
+        container.innerHTML = `
+            <div class="analytics-empty">
+                <h3>📈 No Data Yet</h3>
+                <p>Start completing tasks to see detailed analytics and AI-powered insights!</p>
+            </div>
+        `;
+        return;
+    }
+
+    // Overall Statistics
+    const totalDays = performanceHistory.length;
+    const totalTasks = performanceHistory.reduce((sum, p) => sum + p.tasksCompleted, 0);
+    const totalTime = performanceHistory.reduce((sum, p) => sum + p.timeSpent, 0);
+    const avgCompletion = performanceHistory.reduce((sum, p) => sum + p.completionRate, 0) / totalDays;
+
+    // Category breakdown
+    let categoryHTML = '<h3>📊 Performance by Category</h3><div class="category-grid">';
+    for (const [category, scores] of Object.entries(categoryStrengths)) {
+        const avgScore = scores.reduce((a, b) => a + b, 0) / scores.length;
+        const barColor = avgScore >= 80 ? 'var(--success-color)' : avgScore >= 60 ? 'var(--warning-color)' : 'var(--danger-color)';
+        
+        categoryHTML += `
+            <div class="category-stat">
+                <div class="category-name">${category}</div>
+                <div class="category-bar">
+                    <div class="category-bar-fill" style="width: ${avgScore}%; background: ${barColor};"></div>
+                </div>
+                <div class="category-score">${Math.round(avgScore)}%</div>
+            </div>
+        `;
+    }
+    categoryHTML += '</div>';
+
+    // Recent performance trend
+    const recentTrend = performanceHistory.slice(-14);
+    let trendHTML = '<h3>📈 Performance Trend (Last 14 Days)</h3><div class="trend-chart">';
+    recentTrend.forEach(day => {
+        const barHeight = day.completionRate;
+        const barColor = barHeight >= 80 ? 'var(--success-color)' : barHeight >= 60 ? 'var(--warning-color)' : 'var(--danger-color)';
+        trendHTML += `
+            <div class="trend-bar-container">
+                <div class="trend-bar" style="height: ${barHeight}%; background: ${barColor};" 
+                     title="Day ${day.day}: ${Math.round(day.completionRate)}%"></div>
+                <span class="trend-label">D${day.day}</span>
+            </div>
+        `;
+    });
+    trendHTML += '</div>';
+
+    // Study time analysis
+    const timeByDay = {};
+    performanceHistory.forEach(p => {
+        const dayOfWeek = new Date(p.date).getDay();
+        if (!timeByDay[dayOfWeek]) timeByDay[dayOfWeek] = [];
+        timeByDay[dayOfWeek].push(p.timeSpent);
+    });
+
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    let timeHTML = '<h3>⏰ Study Time by Day of Week</h3><div class="time-chart">';
+    for (let day = 0; day < 7; day++) {
+        const avgTime = timeByDay[day] ? 
+            timeByDay[day].reduce((a, b) => a + b, 0) / timeByDay[day].length : 0;
+        timeHTML += `
+            <div class="time-day">
+                <div class="time-label">${dayNames[day]}</div>
+                <div class="time-value">${Math.round(avgTime)}m</div>
+            </div>
+        `;
+    }
+    timeHTML += '</div>';
+
+    container.innerHTML = `
+        <div class="analytics-overview">
+            <h3>🎯 Overall Statistics</h3>
+            <div class="analytics-stats">
+                <div class="analytics-stat">
+                    <span class="analytics-value">${totalDays}</span>
+                    <span class="analytics-label">Days Active</span>
+                </div>
+                <div class="analytics-stat">
+                    <span class="analytics-value">${totalTasks}</span>
+                    <span class="analytics-label">Tasks Completed</span>
+                </div>
+                <div class="analytics-stat">
+                    <span class="analytics-value">${Math.round(totalTime / 60)}h</span>
+                    <span class="analytics-label">Total Study Time</span>
+                </div>
+                <div class="analytics-stat">
+                    <span class="analytics-value">${Math.round(avgCompletion)}%</span>
+                    <span class="analytics-label">Avg Completion</span>
+                </div>
+            </div>
+        </div>
+
+        ${categoryHTML}
+        ${trendHTML}
+        ${timeHTML}
+
+        <div class="analytics-insights">
+            <h3>🤖 AI Learning Model Insights</h3>
+            
+            ${preferences.preferredCategories.length > 0 ? `
+            <div class="insight-section">
+                <h4>✅ Your Strengths:</h4>
+                <p>${preferences.preferredCategories.join(', ')}</p>
+            </div>
+            ` : ''}
+
+            ${preferences.difficultTopics.length > 0 ? `
+            <div class="insight-section">
+                <h4>⚠️ Areas Needing Focus:</h4>
+                <p>${preferences.difficultTopics.join(', ')}</p>
+            </div>
+            ` : ''}
+
+            <div class="insight-section">
+                <h4>🎯 Current Pace:</h4>
+                <p>${adaptations.paceAdjustment === 'faster' ? '🚀 You\'re ahead of schedule! Consider advanced topics.' :
+                     adaptations.paceAdjustment === 'slower' ? '🐢 Take your time to master fundamentals.' :
+                     '✅ You\'re progressing at a perfect pace!'}</p>
+            </div>
+
+            <div class="insight-section">
+                <h4>💡 Personalized Recommendations:</h4>
+                <ul>
+                    ${adaptations.suggestedFocus.map(s => `<li>${s}</li>`).join('')}
+                </ul>
+            </div>
+
+            <div class="insight-section">
+                <h4>📅 Study Pattern:</h4>
+                <p>Average daily study time: <strong>${preferences.averageStudyTime} minutes</strong></p>
+                <p>${preferences.averageStudyTime >= 120 ? 
+                    '🎉 Excellent! You\'re meeting the 2-hour daily goal.' :
+                    `📈 Try to reach 120 minutes daily for optimal preparation.`}</p>
+            </div>
+        </div>
+    `;
+}
+
+// Export learning data
+function exportLearningData() {
+    const exportData = {
+        exportDate: new Date().toISOString(),
+        summary: {
+            totalDays: state.learningModel.performanceHistory.length,
+            currentDay: state.currentDay,
+            totalTasksCompleted: state.completedTasks.size,
+            averageStudyTime: state.learningModel.preferences.averageStudyTime
+        },
+        performanceHistory: state.learningModel.performanceHistory,
+        categoryStrengths: state.learningModel.categoryStrengths,
+        categoryWeaknesses: state.learningModel.categoryWeaknesses,
+        preferences: state.learningModel.preferences,
+        adaptations: state.learningModel.adaptations,
+        completedTasks: Array.from(state.completedTasks),
+        customTopics: state.customTopics
+    };
+
+    const dataStr = JSON.stringify(exportData, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `google-ml-prep-analytics-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    alert('📥 Learning data exported successfully! Use this to track your progress over time or share with mentors.');
 }
 
 // Initialize app when DOM is loaded

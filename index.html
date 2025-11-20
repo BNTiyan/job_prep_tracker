@@ -43,6 +43,9 @@
             <button id="nextDay" class="nav-btn">Next Day →</button>
         </div>
 
+        <!-- AI-Powered Insights Section -->
+        <div id="insightsContainer" class="insights-section"></div>
+
         <div id="tasksContainer" class="tasks-container"></div>
 
         <div class="action-buttons">
@@ -50,6 +53,7 @@
             <button id="viewProblemsBtn" class="btn btn-success">💻 Daily Coding Problems</button>
             <button id="viewSystemDesignBtn" class="btn btn-info">🏗️ System Design Problems</button>
             <button id="viewTopicsBtn" class="btn btn-secondary">📚 View All Learning Topics</button>
+            <button id="viewAnalyticsBtn" class="btn btn-analytics">📊 Performance Analytics</button>
             <button id="resetProgressBtn" class="btn btn-danger">Reset All Progress</button>
         </div>
 
@@ -118,6 +122,19 @@
                 <h2>🏗️ System Design Practice Problems</h2>
                 <p class="modal-subtitle">Real-world ML system design problems for Google interviews</p>
                 <div id="systemDesignContainer" class="problems-container"></div>
+            </div>
+        </div>
+
+        <!-- Analytics Modal -->
+        <div id="analyticsModal" class="modal">
+            <div class="modal-content modal-large">
+                <span class="close close-analytics">&times;</span>
+                <h2>📊 Performance Analytics & Learning Insights</h2>
+                <p class="modal-subtitle">AI-powered analysis of your study patterns and recommendations</p>
+                <div id="analyticsContainer" class="analytics-container">
+                    <div id="analyticsContent"></div>
+                    <button id="exportDataBtn" class="btn btn-primary" style="margin-top: 20px;">📥 Export Learning Data (JSON)</button>
+                </div>
             </div>
         </div>
     </div>
