@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI/ML Interview Prep Tracker - Google</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 AI/ML Interview Preparation - Google</h1>
+            <p class="subtitle">Your Daily 2-Hour Study Plan - 60 Days to Success</p>
+        </header>
+
+        <div class="progress-section">
+            <div class="progress-header">
+                <h2>Overall Progress</h2>
+                <span class="progress-text" id="progressText">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-value" id="completedTasks">0</span>
+                    <span class="stat-label">Completed</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="totalTasks">0</span>
+                    <span class="stat-label">Total Tasks</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="currentStreak">0</span>
+                    <span class="stat-label">Day Streak</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="date-selector">
+            <button id="prevDay" class="nav-btn">← Previous Day</button>
+            <h2 id="currentDate"></h2>
+            <button id="nextDay" class="nav-btn">Next Day →</button>
+        </div>
+
+        <div id="tasksContainer" class="tasks-container"></div>
+
+        <div class="action-buttons">
+            <button id="addTopicBtn" class="btn btn-primary">+ Add Custom Topic</button>
+            <button id="viewProblemsBtn" class="btn btn-success">💻 Daily Coding Problems</button>
+            <button id="viewSystemDesignBtn" class="btn btn-info">🏗️ System Design Problems</button>
+            <button id="viewTopicsBtn" class="btn btn-secondary">📚 View All Learning Topics</button>
+            <button id="resetProgressBtn" class="btn btn-danger">Reset All Progress</button>
+        </div>
+
+        <!-- Custom Topic Modal -->
+        <div id="customTopicModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Add Custom Topic</h2>
+                <form id="customTopicForm">
+                    <div class="form-group">
+                        <label for="topicName">Topic Name</label>
+                        <input type="text" id="topicName" required placeholder="e.g., Advanced Transformers Architecture">
+                    </div>
+                    <div class="form-group">
+                        <label for="topicDuration">Duration (minutes)</label>
+                        <input type="number" id="topicDuration" min="15" max="120" value="60" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="topicCategory">Category</label>
+                        <select id="topicCategory" required>
+                            <option value="ml-fundamentals">Machine Learning Fundamentals</option>
+                            <option value="deep-learning">Deep Learning</option>
+                            <option value="nlp">Natural Language Processing</option>
+                            <option value="computer-vision">Computer Vision</option>
+                            <option value="mlops">MLOps & Production ML</option>
+                            <option value="rl">Reinforcement Learning</option>
+                            <option value="system-design">ML System Design</option>
+                            <option value="coding">ML Coding Interview</option>
+                            <option value="behavioral">Behavioral</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="topicNotes">Notes/Resources (optional)</label>
+                        <textarea id="topicNotes" rows="3" placeholder="Add links, notes, or resources"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Topic</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Learning Topics Reference Modal -->
+        <div id="learningTopicsModal" class="modal">
+            <div class="modal-content modal-large">
+                <span class="close close-topics">&times;</span>
+                <h2>📚 AI/ML Learning Topics Reference</h2>
+                <p class="modal-subtitle">Complete list of topics to master for Google AI/ML roles</p>
+                <div id="learningTopicsContainer" class="learning-topics-grid"></div>
+            </div>
+        </div>
+
+        <!-- Coding Problems Modal -->
+        <div id="codingProblemsModal" class="modal">
+            <div class="modal-content modal-large">
+                <span class="close close-problems">&times;</span>
+                <h2>💻 Daily Coding Practice Problems</h2>
+                <p class="modal-subtitle">LeetCode-style problems organized by day and difficulty</p>
+                <div id="codingProblemsContainer" class="problems-container"></div>
+            </div>
+        </div>
+
+        <!-- System Design Modal -->
+        <div id="systemDesignModal" class="modal">
+            <div class="modal-content modal-large">
+                <span class="close close-design">&times;</span>
+                <h2>🏗️ System Design Practice Problems</h2>
+                <p class="modal-subtitle">Real-world ML system design problems for Google interviews</p>
+                <div id="systemDesignContainer" class="problems-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+

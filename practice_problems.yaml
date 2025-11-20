@@ -1,0 +1,876 @@
+# AI/ML Interview Practice Problems
+# Organized by category: Coding, System Design, ML Implementation
+
+coding_practice:
+  # Week 1: Arrays & Strings
+  - day: 1
+    category: "Arrays & Hash Tables"
+    difficulty: "Easy to Medium"
+    problems:
+      - name: "Two Sum"
+        difficulty: "Easy"
+        link: "https://leetcode.com/problems/two-sum/"
+        topics: ["Hash Map", "Array"]
+        time_complexity: "O(n)"
+      - name: "Valid Parentheses"
+        difficulty: "Easy"
+        link: "https://leetcode.com/problems/valid-parentheses/"
+        topics: ["Stack", "String"]
+        time_complexity: "O(n)"
+      - name: "Best Time to Buy and Sell Stock"
+        difficulty: "Easy"
+        link: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/"
+        topics: ["Array", "Greedy"]
+        time_complexity: "O(n)"
+
+  - day: 2
+    category: "Sliding Window & Two Pointers"
+    difficulty: "Medium"
+    problems:
+      - name: "Maximum Subarray (Kadane's Algorithm)"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/maximum-subarray/"
+        topics: ["Dynamic Programming", "Array"]
+        time_complexity: "O(n)"
+      - name: "Container With Most Water"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/container-with-most-water/"
+        topics: ["Two Pointers", "Greedy"]
+        time_complexity: "O(n)"
+      - name: "3Sum"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/3sum/"
+        topics: ["Two Pointers", "Sorting"]
+        time_complexity: "O(n²)"
+
+  - day: 3
+    category: "Hash Tables & Strings"
+    difficulty: "Medium"
+    problems:
+      - name: "Longest Substring Without Repeating Characters"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/longest-substring-without-repeating-characters/"
+        topics: ["Hash Set", "Sliding Window"]
+        time_complexity: "O(n)"
+      - name: "Group Anagrams"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/group-anagrams/"
+        topics: ["Hash Map", "String"]
+        time_complexity: "O(n*k)"
+      - name: "Top K Frequent Elements"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/top-k-frequent-elements/"
+        topics: ["Hash Map", "Heap"]
+        time_complexity: "O(n log k)"
+
+  - day: 4
+    category: "String Manipulation"
+    difficulty: "Easy to Medium"
+    problems:
+      - name: "Implement strStr()"
+        difficulty: "Easy"
+        link: "https://leetcode.com/problems/implement-strstr/"
+        topics: ["String", "KMP"]
+        time_complexity: "O(m+n)"
+      - name: "Longest Palindromic Substring"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/longest-palindromic-substring/"
+        topics: ["Dynamic Programming", "String"]
+        time_complexity: "O(n²)"
+      - name: "Valid Anagram"
+        difficulty: "Easy"
+        link: "https://leetcode.com/problems/valid-anagram/"
+        topics: ["Hash Map", "String"]
+        time_complexity: "O(n)"
+
+  - day: 5
+    category: "Linked Lists"
+    difficulty: "Easy to Medium"
+    problems:
+      - name: "Reverse Linked List"
+        difficulty: "Easy"
+        link: "https://leetcode.com/problems/reverse-linked-list/"
+        topics: ["Linked List", "Recursion"]
+        time_complexity: "O(n)"
+      - name: "Merge Two Sorted Lists"
+        difficulty: "Easy"
+        link: "https://leetcode.com/problems/merge-two-sorted-lists/"
+        topics: ["Linked List", "Recursion"]
+        time_complexity: "O(m+n)"
+      - name: "Add Two Numbers"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/add-two-numbers/"
+        topics: ["Linked List", "Math"]
+        time_complexity: "O(max(m,n))"
+
+  # Week 2: Trees & Graphs
+  - day: 6
+    category: "Binary Trees - Basics"
+    difficulty: "Easy"
+    problems:
+      - name: "Binary Tree Inorder Traversal"
+        difficulty: "Easy"
+        link: "https://leetcode.com/problems/binary-tree-inorder-traversal/"
+        topics: ["Tree", "DFS", "Stack"]
+        time_complexity: "O(n)"
+      - name: "Maximum Depth of Binary Tree"
+        difficulty: "Easy"
+        link: "https://leetcode.com/problems/maximum-depth-of-binary-tree/"
+        topics: ["Tree", "DFS", "BFS"]
+        time_complexity: "O(n)"
+      - name: "Symmetric Tree"
+        difficulty: "Easy"
+        link: "https://leetcode.com/problems/symmetric-tree/"
+        topics: ["Tree", "DFS"]
+        time_complexity: "O(n)"
+
+  - day: 7
+    category: "Binary Search Trees"
+    difficulty: "Medium"
+    problems:
+      - name: "Validate Binary Search Tree"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/validate-binary-search-tree/"
+        topics: ["Tree", "BST", "DFS"]
+        time_complexity: "O(n)"
+      - name: "Binary Tree Level Order Traversal"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/binary-tree-level-order-traversal/"
+        topics: ["Tree", "BFS", "Queue"]
+        time_complexity: "O(n)"
+      - name: "Kth Smallest Element in BST"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/kth-smallest-element-in-a-bst/"
+        topics: ["BST", "Inorder"]
+        time_complexity: "O(n)"
+
+  - day: 8
+    category: "Advanced Trees"
+    difficulty: "Medium to Hard"
+    problems:
+      - name: "Lowest Common Ancestor of Binary Tree"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/"
+        topics: ["Tree", "DFS"]
+        time_complexity: "O(n)"
+      - name: "Serialize and Deserialize Binary Tree"
+        difficulty: "Hard"
+        link: "https://leetcode.com/problems/serialize-and-deserialize-binary-tree/"
+        topics: ["Tree", "DFS", "Design"]
+        time_complexity: "O(n)"
+      - name: "Binary Tree Maximum Path Sum"
+        difficulty: "Hard"
+        link: "https://leetcode.com/problems/binary-tree-maximum-path-sum/"
+        topics: ["Tree", "DFS", "Recursion"]
+        time_complexity: "O(n)"
+
+  - day: 9
+    category: "Graph BFS/DFS"
+    difficulty: "Medium"
+    problems:
+      - name: "Number of Islands"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/number-of-islands/"
+        topics: ["Graph", "DFS", "BFS", "Union Find"]
+        time_complexity: "O(m*n)"
+      - name: "Clone Graph"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/clone-graph/"
+        topics: ["Graph", "DFS", "Hash Map"]
+        time_complexity: "O(V+E)"
+      - name: "Course Schedule"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/course-schedule/"
+        topics: ["Graph", "Topological Sort", "DFS"]
+        time_complexity: "O(V+E)"
+
+  - day: 10
+    category: "Graph Algorithms"
+    difficulty: "Medium to Hard"
+    problems:
+      - name: "Word Ladder"
+        difficulty: "Hard"
+        link: "https://leetcode.com/problems/word-ladder/"
+        topics: ["Graph", "BFS"]
+        time_complexity: "O(M² * N)"
+      - name: "Network Delay Time (Dijkstra)"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/network-delay-time/"
+        topics: ["Graph", "Dijkstra", "Heap"]
+        time_complexity: "O(E log V)"
+      - name: "Cheapest Flights Within K Stops"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/cheapest-flights-within-k-stops/"
+        topics: ["Graph", "Bellman-Ford", "BFS"]
+        time_complexity: "O(K*E)"
+
+  # Week 3-4: Dynamic Programming
+  - day: 11
+    category: "DP - Introduction"
+    difficulty: "Easy to Medium"
+    problems:
+      - name: "Climbing Stairs"
+        difficulty: "Easy"
+        link: "https://leetcode.com/problems/climbing-stairs/"
+        topics: ["DP", "Fibonacci"]
+        time_complexity: "O(n)"
+      - name: "House Robber"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/house-robber/"
+        topics: ["DP"]
+        time_complexity: "O(n)"
+      - name: "Coin Change"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/coin-change/"
+        topics: ["DP", "Unbounded Knapsack"]
+        time_complexity: "O(amount * n)"
+
+  - day: 12
+    category: "DP - Subsequences"
+    difficulty: "Medium"
+    problems:
+      - name: "Longest Increasing Subsequence"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/longest-increasing-subsequence/"
+        topics: ["DP", "Binary Search"]
+        time_complexity: "O(n log n)"
+      - name: "Word Break"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/word-break/"
+        topics: ["DP", "Trie"]
+        time_complexity: "O(n²)"
+      - name: "Partition Equal Subset Sum"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/partition-equal-subset-sum/"
+        topics: ["DP", "0/1 Knapsack"]
+        time_complexity: "O(n * sum)"
+
+  - day: 13
+    category: "DP - Strings"
+    difficulty: "Medium to Hard"
+    problems:
+      - name: "Edit Distance"
+        difficulty: "Hard"
+        link: "https://leetcode.com/problems/edit-distance/"
+        topics: ["DP", "String"]
+        time_complexity: "O(m*n)"
+      - name: "Longest Common Subsequence"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/longest-common-subsequence/"
+        topics: ["DP", "String"]
+        time_complexity: "O(m*n)"
+      - name: "Palindromic Substrings"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/palindromic-substrings/"
+        topics: ["DP", "String"]
+        time_complexity: "O(n²)"
+
+  - day: 14
+    category: "DP - Grid"
+    difficulty: "Medium to Hard"
+    problems:
+      - name: "Unique Paths"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/unique-paths/"
+        topics: ["DP", "Grid"]
+        time_complexity: "O(m*n)"
+      - name: "Minimum Path Sum"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/minimum-path-sum/"
+        topics: ["DP", "Grid"]
+        time_complexity: "O(m*n)"
+      - name: "Maximal Square"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/maximal-square/"
+        topics: ["DP", "Grid"]
+        time_complexity: "O(m*n)"
+
+  - day: 15
+    category: "Backtracking"
+    difficulty: "Medium"
+    problems:
+      - name: "Permutations"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/permutations/"
+        topics: ["Backtracking", "Recursion"]
+        time_complexity: "O(n!)"
+      - name: "Combinations"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/combinations/"
+        topics: ["Backtracking"]
+        time_complexity: "O(C(n,k))"
+      - name: "Subsets"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/subsets/"
+        topics: ["Backtracking", "Bit Manipulation"]
+        time_complexity: "O(2ⁿ)"
+
+  # Advanced Topics
+  - day: 20
+    category: "Trie"
+    difficulty: "Medium to Hard"
+    problems:
+      - name: "Implement Trie (Prefix Tree)"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/implement-trie-prefix-tree/"
+        topics: ["Trie", "Design"]
+        time_complexity: "O(m)"
+      - name: "Word Search II"
+        difficulty: "Hard"
+        link: "https://leetcode.com/problems/word-search-ii/"
+        topics: ["Trie", "Backtracking", "DFS"]
+        time_complexity: "O(m*n*4³ˡ)"
+      - name: "Design Add and Search Words Data Structure"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/design-add-and-search-words-data-structure/"
+        topics: ["Trie", "DFS"]
+        time_complexity: "O(m)"
+
+  - day: 25
+    category: "Heap / Priority Queue"
+    difficulty: "Medium to Hard"
+    problems:
+      - name: "Kth Largest Element in Array"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/kth-largest-element-in-an-array/"
+        topics: ["Heap", "QuickSelect"]
+        time_complexity: "O(n log k)"
+      - name: "Merge K Sorted Lists"
+        difficulty: "Hard"
+        link: "https://leetcode.com/problems/merge-k-sorted-lists/"
+        topics: ["Heap", "Divide & Conquer"]
+        time_complexity: "O(N log k)"
+      - name: "Find Median from Data Stream"
+        difficulty: "Hard"
+        link: "https://leetcode.com/problems/find-median-from-data-stream/"
+        topics: ["Heap", "Design"]
+        time_complexity: "O(log n)"
+
+  - day: 30
+    category: "Stack / Monotonic Stack"
+    difficulty: "Hard"
+    problems:
+      - name: "Sliding Window Maximum"
+        difficulty: "Hard"
+        link: "https://leetcode.com/problems/sliding-window-maximum/"
+        topics: ["Deque", "Monotonic Queue"]
+        time_complexity: "O(n)"
+      - name: "Trapping Rain Water"
+        difficulty: "Hard"
+        link: "https://leetcode.com/problems/trapping-rain-water/"
+        topics: ["Two Pointers", "Stack"]
+        time_complexity: "O(n)"
+      - name: "Largest Rectangle in Histogram"
+        difficulty: "Hard"
+        link: "https://leetcode.com/problems/largest-rectangle-in-histogram/"
+        topics: ["Monotonic Stack"]
+        time_complexity: "O(n)"
+
+  - day: 40
+    category: "Binary Search"
+    difficulty: "Medium to Hard"
+    problems:
+      - name: "Median of Two Sorted Arrays"
+        difficulty: "Hard"
+        link: "https://leetcode.com/problems/median-of-two-sorted-arrays/"
+        topics: ["Binary Search", "Divide & Conquer"]
+        time_complexity: "O(log(min(m,n)))"
+      - name: "Search in Rotated Sorted Array"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/search-in-rotated-sorted-array/"
+        topics: ["Binary Search"]
+        time_complexity: "O(log n)"
+      - name: "Find Peak Element"
+        difficulty: "Medium"
+        link: "https://leetcode.com/problems/find-peak-element/"
+        topics: ["Binary Search"]
+        time_complexity: "O(log n)"
+
+  - day: 50
+    category: "Advanced DP"
+    difficulty: "Hard"
+    problems:
+      - name: "Regular Expression Matching"
+        difficulty: "Hard"
+        link: "https://leetcode.com/problems/regular-expression-matching/"
+        topics: ["DP", "String", "Recursion"]
+        time_complexity: "O(m*n)"
+      - name: "Wildcard Matching"
+        difficulty: "Hard"
+        link: "https://leetcode.com/problems/wildcard-matching/"
+        topics: ["DP", "String", "Greedy"]
+        time_complexity: "O(m*n)"
+      - name: "Burst Balloons"
+        difficulty: "Hard"
+        link: "https://leetcode.com/problems/burst-balloons/"
+        topics: ["DP", "Divide & Conquer"]
+        time_complexity: "O(n³)"
+
+system_design_problems:
+  - day: 7
+    problem: "Design URL Shortener (like bit.ly)"
+    difficulty: "Medium"
+    focus_areas:
+      - "Requirements: Functional (shorten URL, redirect) & Non-functional (low latency, high availability)"
+      - "API Design: POST /shorten, GET /{shortURL}"
+      - "Database: Hash collisions, base62 encoding"
+      - "Scaling: Database sharding, caching (Redis), rate limiting"
+      - "Analytics: Click tracking, geo-location"
+    related_experience: "Your AWS Lambda + DynamoDB work at Continental"
+    estimate_time: "45-60 min"
+
+  - day: 11
+    problem: "Design Instagram/Twitter News Feed"
+    difficulty: "Medium-Hard"
+    focus_areas:
+      - "Requirements: Post creation, timeline generation, follow/unfollow"
+      - "Fan-out on Write vs Read tradeoffs"
+      - "Timeline Generation: Pull model vs Push model vs Hybrid"
+      - "Database: Posts table, User-Follow graph, Timeline cache"
+      - "Caching: Redis for hot feeds, CDN for images"
+      - "Ranking: Chronological vs ML-based ranking"
+    related_experience: "Your React/Django dashboard work"
+    estimate_time: "60 min"
+
+  - day: 14
+    problem: "Design Netflix Recommendation System"
+    difficulty: "Hard"
+    focus_areas:
+      - "Requirements: Personalized recommendations, cold start, real-time updates"
+      - "ML Approach: Collaborative filtering (Matrix Factorization, ALS)"
+      - "Two-tower model: User tower + Item tower"
+      - "Feature Engineering: User history, item metadata, context"
+      - "Training Pipeline: Batch training, online learning"
+      - "Serving: Pre-compute recommendations, real-time re-ranking"
+      - "A/B Testing: Multi-armed bandits, experimentation"
+    related_experience: "Your ML pipelines and Databricks analytics"
+    estimate_time: "60 min"
+
+  - day: 19
+    problem: "Design Google Search (High-Level)"
+    difficulty: "Hard"
+    focus_areas:
+      - "Crawling: Web crawler, robots.txt, politeness"
+      - "Indexing: Inverted index, forward index"
+      - "Ranking: PageRank, TF-IDF, BERT for semantic search"
+      - "Query Processing: Query understanding, spell correction"
+      - "Serving: Distributed query processing, caching"
+      - "Personalization: User history, location"
+    related_experience: "Search and ranking concepts"
+    estimate_time: "60 min"
+
+  - day: 21
+    problem: "Design YouTube Video Streaming"
+    difficulty: "Hard"
+    focus_areas:
+      - "Requirements: Upload, transcode, stream, recommendations"
+      - "Upload: Chunked upload, resumable uploads"
+      - "Transcoding: Multiple resolutions (360p, 720p, 1080p, 4K), formats"
+      - "Storage: Distributed file system, CDN"
+      - "Streaming: Adaptive bitrate streaming (HLS, DASH)"
+      - "View Count: Distributed counter, eventual consistency"
+      - "Recommendations: Collaborative filtering + Content-based"
+    related_experience: "Your video processing pipeline knowledge"
+    estimate_time: "60 min"
+
+  - day: 24
+    problem: "Design Fraud Detection System"
+    difficulty: "Hard"
+    focus_areas:
+      - "Requirements: Real-time detection, low false positives, explainability"
+      - "Features: Transaction amount, location, time, device, user history"
+      - "ML Model: Logistic regression, XGBoost, ensemble"
+      - "Rule Engine + ML: Hybrid approach"
+      - "Real-time Scoring: Feature store, model serving (sub-100ms)"
+      - "Feedback Loop: Analyst review, model retraining"
+      - "Handling Imbalance: SMOTE, class weights"
+    related_experience: "Your Beacon AI SAST work - similar anomaly detection"
+    estimate_time: "60 min"
+
+  - day: 28
+    problem: "Design Uber/Lyft Ride Matching System"
+    difficulty: "Hard"
+    focus_areas:
+      - "Requirements: Match rider with driver, ETA, surge pricing"
+      - "Geospatial: Geohashing, QuadTree, S2 geometry"
+      - "Real-time Matching: Websockets, pub-sub (Kafka)"
+      - "ETA Prediction: Historical data, traffic, ML model"
+      - "Pricing: Surge pricing based on supply-demand"
+      - "Database: Driver location updates, ride state machine"
+      - "Notification: Push notifications, SMS"
+    related_experience: "Real-time systems, location-based services"
+    estimate_time: "60 min"
+
+  - day: 30
+    problem: "Design WhatsApp/Facebook Messenger"
+    difficulty: "Medium-Hard"
+    focus_areas:
+      - "Requirements: 1-on-1 chat, group chat, delivery receipts, encryption"
+      - "Protocol: WebSockets for real-time, long polling fallback"
+      - "Message Queue: Kafka, RabbitMQ for async delivery"
+      - "Storage: Message history, media storage (S3)"
+      - "Delivery Receipts: Sent, Delivered, Read"
+      - "End-to-end Encryption: Signal protocol"
+      - "Group Chat: Message fanout, notification"
+      - "Scalability: Sharding by user_id"
+    related_experience: "Your real-time dashboard work"
+    estimate_time: "60 min"
+
+  - day: 32
+    problem: "Design Google Photos Image Search"
+    difficulty: "Hard"
+    focus_areas:
+      - "Requirements: Search by objects, faces, text, similarity"
+      - "Image Embeddings: CNN (ResNet, EfficientNet) → vector"
+      - "Vector Search: Approximate Nearest Neighbors (FAISS, Annoy)"
+      - "Face Recognition: Face detection → embedding → clustering"
+      - "Object Detection: YOLO, Faster R-CNN for tagging"
+      - "Text Search: OCR + embedding"
+      - "Storage: Image storage (S3), metadata (DB), vectors (specialized DB)"
+      - "Privacy: On-device processing, encrypted storage"
+    related_experience: "Your ADAS camera object detection & CV work!"
+    estimate_time: "60 min"
+
+  - day: 35
+    problem: "Design Ad Click Prediction System (CTR Prediction)"
+    difficulty: "Hard"
+    focus_areas:
+      - "Requirements: Predict P(click | ad, user, context)"
+      - "Features: User demographics, ad creative, context (time, device)"
+      - "Feature Engineering: Feature crosses, embeddings for categorical"
+      - "ML Model: Logistic regression → GBDT → Deep Learning (Wide & Deep)"
+      - "Feature Store: Online & offline features"
+      - "Training: Batch training daily, online learning for fresh data"
+      - "Serving: Low latency (<50ms), high QPS"
+      - "Calibration: Predicted CTR vs actual CTR"
+      - "A/B Testing: Auction mechanism, revenue optimization"
+    related_experience: "Your ML pipelines, feature engineering work"
+    estimate_time: "60 min"
+
+  - day: 38
+    problem: "Design Gmail Spam Classification System"
+    difficulty: "Medium-Hard"
+    focus_areas:
+      - "Requirements: High precision (low false positives), handle adversarial users"
+      - "Features: Email content, sender reputation, attachments, links"
+      - "ML Model: Naive Bayes → SVM → Deep Learning (BERT)"
+      - "Online Learning: User feedback (mark as spam/not spam)"
+      - "Adversarial Handling: Feature obfuscation, model robustness"
+      - "Personalization: Per-user spam models"
+      - "Precision vs Recall: False positive very costly"
+      - "Scalability: Real-time classification, billions of emails"
+    related_experience: "Your ML security work - adversarial ML awareness"
+    estimate_time: "60 min"
+
+  - day: 40
+    problem: "Design Google Assistant (Voice Assistant)"
+    difficulty: "Hard"
+    focus_areas:
+      - "Components: Speech Recognition → NLU → Dialogue → Action → TTS"
+      - "Speech-to-Text: RNN, Transformer models, streaming ASR"
+      - "Natural Language Understanding: Intent classification, entity extraction (BERT)"
+      - "Dialogue Management: Context tracking, multi-turn conversations"
+      - "Action Execution: API calls to services"
+      - "Text-to-Speech: WaveNet, Tacotron"
+      - "Low Latency: <200ms end-to-end"
+      - "On-device vs Cloud: Hybrid approach"
+      - "Personalization: User history, preferences"
+    related_experience: "Your NLP work with Vertex AI Gemini"
+    estimate_time: "60 min"
+
+  - day: 44
+    problem: "Design Autonomous Driving Perception System"
+    difficulty: "Expert"
+    focus_areas:
+      - "Sensors: Camera, LiDAR, Radar fusion"
+      - "Perception Pipeline: Object detection → tracking → prediction"
+      - "Computer Vision: YOLO, Faster R-CNN for real-time detection"
+      - "Sensor Fusion: Kalman filter, particle filter"
+      - "3D Object Detection: PointNet, PointPillars for LiDAR"
+      - "Path Planning: A*, RRT, lattice planning"
+      - "Safety: Redundancy, fail-safes, ISO 26262"
+      - "Real-time Constraints: <100ms latency"
+      - "Model Deployment: Edge inference, TensorRT optimization"
+    related_experience: "Your ADAS camera work at Continental - PERFECT match!"
+    estimate_time: "60 min"
+
+  - day: 48
+    problem: "Design Real-Time ML Model Serving Platform"
+    difficulty: "Hard"
+    focus_areas:
+      - "Requirements: Low latency (<50ms), high throughput, model versioning"
+      - "Model Registry: MLflow, versioning, metadata"
+      - "Serving Framework: TensorFlow Serving, TorchServe, Triton"
+      - "A/B Testing: Traffic splitting, shadow mode"
+      - "Canary Deployment: Gradual rollout, automatic rollback"
+      - "Monitoring: Latency, throughput, prediction distribution, drift"
+      - "Auto-scaling: Kubernetes HPA, GPU scheduling"
+      - "Feature Store: Online feature computation"
+      - "Caching: Prediction caching for repeated queries"
+    related_experience: "Your MLOps work - Databricks, Vertex AI, Docker/K8s"
+    estimate_time: "60 min"
+
+  - day: 52
+    problem: "Design News Feed Ranking Algorithm"
+    difficulty: "Hard"
+    focus_areas:
+      - "Requirements: Personalized, engaging, diverse, timely"
+      - "Candidate Generation: Friends' posts, pages, groups"
+      - "Ranking Model: P(engagement | user, post, context)"
+      - "Features: User history, post metadata, social signals"
+      - "ML Model: GBDT → Deep Learning (two-tower)"
+      - "Optimization Objective: Engagement (click, like, share, dwell time)"
+      - "Diversity: Avoid filter bubbles, content variety"
+      - "Real-time Updates: Incremental ranking"
+      - "Experimentation: A/B testing, counter-factual evaluation"
+    related_experience: "Your KPI dashboard and analytics work"
+    estimate_time: "60 min"
+
+  - day: 56
+    problem: "Design Distributed ML Training System"
+    difficulty: "Expert"
+    focus_areas:
+      - "Requirements: Train large models (billions of parameters) efficiently"
+      - "Data Parallelism: Split data across workers, aggregate gradients"
+      - "Model Parallelism: Split model layers across GPUs"
+      - "Parameter Server: Centralized vs decentralized (ring-allreduce)"
+      - "Frameworks: Horovod, PyTorch DDP, TensorFlow Distributed"
+      - "Fault Tolerance: Checkpointing, worker failure handling"
+      - "GPU Scheduling: Kubernetes, resource allocation"
+      - "Communication: NCCL, InfiniBand for fast inter-GPU communication"
+      - "Scalability: Near-linear speedup with more GPUs"
+    related_experience: "Your distributed systems and cloud infrastructure work"
+    estimate_time: "60 min"
+
+ml_coding_challenges:
+  # Implement from scratch (NumPy only, no sklearn/PyTorch for these)
+  - day: 1
+    challenge: "Linear Regression with Gradient Descent"
+    implement:
+      - "Cost function (MSE)"
+      - "Gradient descent update rule"
+      - "fit() and predict() methods"
+      - "Vectorized implementation"
+    test_data: "Boston Housing or generated data"
+    language: "NumPy only"
+    time: "30-40 min"
+
+  - day: 3
+    challenge: "Logistic Regression for Binary Classification"
+    implement:
+      - "Sigmoid function"
+      - "Binary cross-entropy loss"
+      - "Gradient descent"
+      - "predict_proba() method"
+    test_data: "Iris (binary) or generated data"
+    language: "NumPy only"
+    time: "40 min"
+
+  - day: 5
+    challenge: "K-Nearest Neighbors (KNN)"
+    implement:
+      - "Distance metrics (Euclidean, Manhattan)"
+      - "K-nearest selection"
+      - "Majority voting for classification"
+      - "Weighted voting by distance"
+    test_data: "Iris dataset"
+    language: "NumPy only"
+    time: "35 min"
+
+  - day: 8
+    challenge: "Decision Tree Classifier"
+    implement:
+      - "Gini impurity calculation"
+      - "Information gain"
+      - "Recursive splitting algorithm"
+      - "Tree structure (Node class)"
+      - "predict() method"
+    test_data: "Iris or Titanic"
+    language: "Python (NumPy allowed)"
+    time: "50-60 min"
+
+  - day: 12
+    challenge: "K-Means Clustering"
+    implement:
+      - "Random centroid initialization"
+      - "Assignment step (closest centroid)"
+      - "Update step (recompute centroids)"
+      - "Convergence check"
+      - "Elbow method for K selection"
+    test_data: "Generated blobs"
+    language: "NumPy only"
+    time: "40 min"
+
+  - day: 15
+    challenge: "Neural Network (2-layer) from Scratch"
+    implement:
+      - "Forward pass (input → hidden → output)"
+      - "ReLU and Sigmoid activation"
+      - "Binary cross-entropy loss"
+      - "Backpropagation (compute gradients)"
+      - "Weight updates (gradient descent)"
+      - "Training loop"
+    test_data: "XOR problem or MNIST"
+    language: "NumPy only"
+    time: "60-70 min"
+
+  - day: 18
+    challenge: "Convolutional Layer (Conv2D)"
+    implement:
+      - "Conv2D forward pass (no padding, stride=1)"
+      - "Im2col optimization (optional)"
+      - "Multiple filters"
+      - "Output shape calculation"
+    test_data: "Small image (28x28)"
+    language: "NumPy only"
+    time: "50 min"
+
+  - day: 22
+    challenge: "Scaled Dot-Product Attention Mechanism"
+    implement:
+      - "Query, Key, Value projections"
+      - "Attention scores (Q @ K^T / sqrt(d_k))"
+      - "Softmax over scores"
+      - "Weighted sum of values"
+      - "Multi-head attention (bonus)"
+    test_data: "Simple sequence data"
+    language: "NumPy or PyTorch"
+    time: "45 min"
+
+  - day: 25
+    challenge: "Batch Normalization Layer"
+    implement:
+      - "Forward pass (normalize, scale, shift)"
+      - "Running mean and variance (inference)"
+      - "Backward pass (gradients)"
+      - "Training vs inference mode"
+    test_data: "Random batch data"
+    language: "NumPy only"
+    time: "50 min"
+
+  - day: 30
+    challenge: "Adam Optimizer"
+    implement:
+      - "First moment estimate (momentum)"
+      - "Second moment estimate (RMSProp)"
+      - "Bias correction"
+      - "Weight update rule"
+    test_data: "Use with simple NN"
+    language: "NumPy only"
+    time: "40 min"
+
+  - day: 36
+    challenge: "Backpropagation with Computational Graph"
+    implement:
+      - "Node class with forward/backward"
+      - "Chain rule application"
+      - "Build computation graph for y = w*x + b"
+      - "Automatic differentiation"
+    test_data: "Simple function"
+    language: "NumPy only"
+    time: "60 min"
+
+  - day: 40
+    challenge: "Mini-batch SGD with Momentum"
+    implement:
+      - "Batch sampling"
+      - "Momentum term (exponential moving average)"
+      - "Learning rate scheduling"
+      - "Train simple model"
+    test_data: "MNIST or Fashion-MNIST"
+    language: "NumPy + PyTorch (data loading)"
+    time: "45 min"
+
+  - day: 45
+    challenge: "Simple RNN Cell"
+    implement:
+      - "Forward pass for single timestep"
+      - "Hidden state update"
+      - "Backpropagation Through Time (BPTT)"
+      - "Sequence processing"
+    test_data: "Simple sequence (e.g., [1,2,3,4,5])"
+    language: "NumPy only"
+    time: "55 min"
+
+  - day: 50
+    challenge: "Dropout Layer"
+    implement:
+      - "Training mode: random dropout"
+      - "Inference mode: no dropout"
+      - "Inverted dropout (scale activations)"
+      - "Forward and backward pass"
+    test_data: "Use with simple NN"
+    language: "NumPy only"
+    time: "30 min"
+
+  - day: 54
+    challenge: "Softmax with Cross-Entropy Loss"
+    implement:
+      - "Numerical stable softmax"
+      - "Cross-entropy loss"
+      - "Combined gradient (softmax + loss)"
+      - "Multi-class classification"
+    test_data: "Iris dataset"
+    language: "NumPy only"
+    time: "35 min"
+
+  - day: 57
+    challenge: "Principal Component Analysis (PCA)"
+    implement:
+      - "Data centering"
+      - "Covariance matrix"
+      - "Eigenvalue decomposition"
+      - "Select top K components"
+      - "Transform and inverse_transform"
+    test_data: "Iris or generated high-dim data"
+    language: "NumPy only"
+    time: "45 min"
+
+practice_resources:
+  platforms:
+    - name: "LeetCode"
+      url: "https://leetcode.com"
+      focus: "Coding interviews (DS&A)"
+      recommendation: "Premium for company-specific questions"
+    
+    - name: "NeetCode"
+      url: "https://neetcode.io"
+      focus: "Curated 150 LeetCode problems"
+      recommendation: "Free, excellent for structured practice"
+    
+    - name: "Pramp"
+      url: "https://www.pramp.com"
+      focus: "Peer mock interviews"
+      recommendation: "Free, practice both interviewer and interviewee"
+    
+    - name: "interviewing.io"
+      url: "https://interviewing.io"
+      focus: "Anonymous mock interviews with engineers"
+      recommendation: "Paid, high-quality feedback"
+    
+    - name: "Kaggle"
+      url: "https://kaggle.com"
+      focus: "ML competitions, datasets"
+      recommendation: "Build portfolio projects"
+    
+    - name: "System Design Primer"
+      url: "https://github.com/donnemartin/system-design-primer"
+      focus: "System design concepts"
+      recommendation: "Comprehensive free resource"
+
+  study_plan:
+    week_1_2: "DS&A Fundamentals - Arrays, Strings, Linked Lists, Trees"
+    week_3_4: "Advanced DS&A - DP, Graphs, Backtracking"
+    week_5_6: "ML Coding - Implement algorithms from scratch"
+    week_7_8: "System Design - Practice 2-3 designs per week"
+    week_9_10: "Mock Interviews - At least 2 per week"
+
+  interview_tips:
+    - "Think out loud - explain your thought process"
+    - "Clarify requirements before coding"
+    - "Start with brute force, then optimize"
+    - "Test with edge cases"
+    - "Discuss time and space complexity"
+    - "For ML: Discuss tradeoffs (latency vs accuracy, etc.)"
+    - "For system design: Start with requirements, then scale"
+
