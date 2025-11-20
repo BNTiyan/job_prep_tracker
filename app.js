@@ -3,7 +3,7 @@ let state = {
     currentDay: 1,
     completedTasks: new Set(),
     customTopics: [],
-    startDate: new Date().toISOString().split('T')[0],
+    startDate: getNextDay(), // Start from tomorrow
     practiceProblems: null, // Will load from YAML
     learningModel: {
         performanceHistory: [], // Track daily performance
@@ -21,6 +21,45 @@ let state = {
         }
     }
 };
+
+// Get tomorrow's date as start date
+function getNextDay() {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    return tomorrow.toISOString().split('T')[0];
+}
+
+// Get current day based on start date
+function calculateCurrentDay() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const start = new Date(state.startDate);
+    start.setHours(0, 0, 0, 0);
+    
+    const diffTime = today - start;
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    
+    // If today is before start date, we're at day 1 (preview mode)
+    if (diffDays < 0) {
+        return 1;
+    }
+    
+    // Day 1 is the start date, so add 1
+    return Math.min(diffDays + 1, 60);
+}
+
+// Check if we should auto-advance to today's day
+function autoAdvanceToToday() {
+    const calculatedDay = calculateCurrentDay();
+    
+    // Only auto-advance if user hasn't manually navigated
+    if (!state.manualNavigation && calculatedDay > state.currentDay) {
+        state.currentDay = calculatedDay;
+        saveState();
+    }
+}
 
 // Load practice problems from YAML
 async function loadPracticeProblems() {
@@ -48,10 +87,19 @@ function loadState() {
     if (saved) {
         const parsed = JSON.parse(saved);
         state = {
+            ...state, // Keep default values
             ...parsed,
             completedTasks: new Set(parsed.completedTasks || [])
         };
+        
+        // If no start date set, use tomorrow
+        if (!state.startDate) {
+            state.startDate = getNextDay();
+        }
     }
+    
+    // Auto-advance to today's day if needed
+    autoAdvanceToToday();
 }
 
 // Save state to localStorage
@@ -240,11 +288,78 @@ function generateAdaptations() {
 async function init() {
     await loadPracticeProblems();
     loadState();
+    
+    // Show welcome message for new users
+    showWelcomeIfNeeded();
+    
     renderTasks();
     updateProgress();
     updateDateDisplay();
     renderInsights(); // Show AI-powered insights
     setupEventListeners();
+}
+
+// Show welcome message for first-time users
+function showWelcomeIfNeeded() {
+    const hasSeenWelcome = localStorage.getItem('hasSeenWelcome');
+    
+    if (!hasSeenWelcome) {
+        const startDate = new Date(state.startDate);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        const daysUntilStart = Math.ceil((startDate - today) / (1000 * 60 * 60 * 24));
+        
+        const welcomeMessage = `
+            <div class="welcome-overlay" id="welcomeOverlay">
+                <div class="welcome-modal">
+                    <h2>🎯 Welcome to Your AI/ML Interview Prep!</h2>
+                    <p>Your 60-day preparation journey starts <strong>tomorrow</strong>!</p>
+                    <div class="welcome-info">
+                        <div class="welcome-item">
+                            <span class="welcome-icon">📅</span>
+                            <div>
+                                <strong>Start Date:</strong> ${startDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
+                            </div>
+                        </div>
+                        <div class="welcome-item">
+                            <span class="welcome-icon">⏰</span>
+                            <div>
+                                <strong>Daily Commitment:</strong> 2 hours of focused study
+                            </div>
+                        </div>
+                        <div class="welcome-item">
+                            <span class="welcome-icon">🤖</span>
+                            <div>
+                                <strong>AI Learning:</strong> Personalized insights as you progress
+                            </div>
+                        </div>
+                        <div class="welcome-item">
+                            <span class="welcome-icon">💻</span>
+                            <div>
+                                <strong>What's Included:</strong> Coding problems, ML theory, System design, Implementation challenges
+                            </div>
+                        </div>
+                    </div>
+                    <p class="welcome-note">
+                        ${daysUntilStart === 1 ? 
+                            "Starting tomorrow! You can preview Day 1 content now. 🚀" :
+                            "You can preview the content and start early if you'd like!"}
+                    </p>
+                    <button id="welcomeStartBtn" class="btn btn-primary btn-large">
+                        Let's Get Started! 💪
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', welcomeMessage);
+        
+        document.getElementById('welcomeStartBtn').addEventListener('click', () => {
+            localStorage.setItem('hasSeenWelcome', 'true');
+            document.getElementById('welcomeOverlay').remove();
+        });
+    }
 }
 
 // Render AI-powered insights
@@ -644,10 +759,37 @@ function updateDateDisplay() {
     const date = new Date(state.startDate);
     date.setDate(date.getDate() + state.currentDay - 1);
     
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    const dateString = date.toLocaleDateString('en-US', options);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
     
-    document.getElementById('currentDate').textContent = `Day ${state.currentDay} - ${dateString}`;
+    const currentDate = new Date(date);
+    currentDate.setHours(0, 0, 0, 0);
+    
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const dateString = currentDate.toLocaleDateString('en-US', options);
+    
+    // Calculate days until start or days into plan
+    const startDate = new Date(state.startDate);
+    startDate.setHours(0, 0, 0, 0);
+    const daysUntilStart = Math.ceil((startDate - today) / (1000 * 60 * 60 * 24));
+    
+    let dateLabel = '';
+    if (daysUntilStart > 0) {
+        dateLabel = `<span class="date-badge date-future">Starts in ${daysUntilStart} day${daysUntilStart > 1 ? 's' : ''}</span>`;
+    } else if (daysUntilStart === 0) {
+        dateLabel = '<span class="date-badge date-today">Starts Tomorrow! 🚀</span>';
+    } else if (currentDate.getTime() === today.getTime()) {
+        dateLabel = '<span class="date-badge date-today">Today 📍</span>';
+    } else if (currentDate < today) {
+        dateLabel = '<span class="date-badge date-past">Past Day</span>';
+    } else {
+        dateLabel = '<span class="date-badge date-future">Upcoming</span>';
+    }
+    
+    document.getElementById('currentDate').innerHTML = `
+        Day ${state.currentDay} - ${dateString}
+        ${dateLabel}
+    `;
     
     // Update navigation buttons
     document.getElementById('prevDay').disabled = state.currentDay <= 1;
@@ -660,6 +802,7 @@ function setupEventListeners() {
     document.getElementById('prevDay').addEventListener('click', () => {
         if (state.currentDay > 1) {
             state.currentDay--;
+            state.manualNavigation = true; // User manually navigated
             saveState();
             renderTasks();
             updateProgress();
@@ -671,6 +814,21 @@ function setupEventListeners() {
     document.getElementById('nextDay').addEventListener('click', () => {
         if (state.currentDay < 60) {
             state.currentDay++;
+            state.manualNavigation = true; // User manually navigated
+            saveState();
+            renderTasks();
+            updateProgress();
+            updateDateDisplay();
+            renderInsights();
+        }
+    });
+
+    // Jump to today button
+    document.getElementById('todayBtn').addEventListener('click', () => {
+        const todayDay = calculateCurrentDay();
+        if (todayDay !== state.currentDay) {
+            state.currentDay = todayDay;
+            state.manualNavigation = false; // Reset manual navigation flag
             saveState();
             renderTasks();
             updateProgress();

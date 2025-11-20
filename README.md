@@ -25,7 +25,7 @@ This tracker is specifically designed based on your background as a **Cybersecur
 
 1. Navigate to the folder:
 ```bash
-cd /Users/bhavananare/github/webapp/job-prep-tracker
+cd job-prep-tracker
 ```
 
 2. Open `index.html` in your browser:
@@ -52,6 +52,20 @@ netlify deploy --prod
 ```
 
 ## 📖 Usage
+
+### First Time Setup
+
+When you first open the app, you'll see a welcome screen that:
+- ✅ Sets your **start date to tomorrow** automatically
+- ✅ Explains the 60-day journey ahead
+- ✅ Shows your daily commitment (2 hours)
+- ✅ Previews what's included
+
+**Why start tomorrow?**
+- Gives you time to mentally prepare
+- Allows you to preview Day 1 content
+- Sets a clear starting point for tracking
+- You can always start early if you want!
 
 ### Main Dashboard
 
@@ -106,22 +120,37 @@ Need to focus on something specific?
 
 ### Daily Workflow
 
-**Morning (or whenever you start):**
-1. Open the tracker
-2. Review today's tasks
-3. Check if there are carried-over tasks from yesterday
+**First Time:**
+1. Open the app → See welcome screen
+2. Review your start date (tomorrow)
+3. Click "Let's Get Started"
+4. Preview Day 1 content (optional)
 
-**During Study (2 hours):**
-1. Work through coding problems (30-40 min)
-2. Study the day's ML topic (60 min)
-3. Optional: Practice system design if it's a system design day (40-50 min)
+**Daily Routine:**
+1. **Morning (or whenever you start):**
+   - Open the tracker (auto-advances to today's day!)
+   - Review today's tasks
+   - Check AI insights and recommendations
+   - Review carried-over tasks from yesterday
 
-**End of Session:**
-1. Check off completed tasks
-2. Review tomorrow's preview
-3. Track your streak!
+2. **During Study (2 hours):**
+   - Work through coding problems (30-40 min)
+   - Study the day's ML topic (60 min)
+   - Optional: Practice system design if scheduled (40-50 min)
 
-## 🤖 Preparation Areas
+3. **End of Session:**
+   - Check off completed tasks
+   - AI model updates your insights
+   - Review tomorrow's preview
+   - Track your streak!
+
+**Navigation:**
+- **← Previous / Next →**: Browse any day
+- **Jump to Today**: Instantly go to today's day
+- **Date Badge**: Shows if day is Past/Today/Future
+- **Auto-advance**: App automatically shows today's content each day
+
+**Daily 2-Hour Session:**
 
 ### Core ML Topics
 1. **Machine Learning Fundamentals** - Supervised, unsupervised learning, evaluation metrics
