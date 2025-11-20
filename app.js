@@ -3,7 +3,7 @@ let state = {
     currentDay: 1,
     completedTasks: new Set(),
     customTopics: [],
-    startDate: getNextDay(), // Start from tomorrow
+    startDate: getTodayDate(), // Start from today
     practiceProblems: null, // Will load from YAML
     learningModel: {
         performanceHistory: [], // Track daily performance
@@ -22,12 +22,11 @@ let state = {
     }
 };
 
-// Get tomorrow's date as start date
-function getNextDay() {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(0, 0, 0, 0);
-    return tomorrow.toISOString().split('T')[0];
+// Get today's date as start date
+function getTodayDate() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today.toISOString().split('T')[0];
 }
 
 // Get current day based on start date
@@ -92,9 +91,9 @@ function loadState() {
             completedTasks: new Set(parsed.completedTasks || [])
         };
         
-        // If no start date set, use tomorrow
+        // If no start date set, use today
         if (!state.startDate) {
-            state.startDate = getNextDay();
+            state.startDate = getTodayDate();
         }
     }
     
@@ -308,13 +307,19 @@ function showWelcomeIfNeeded() {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         
-        const daysUntilStart = Math.ceil((startDate - today) / (1000 * 60 * 60 * 24));
+        const daysUntilStart = Math.max(0, Math.ceil((startDate - today) / (1000 * 60 * 60 * 24)));
+        const startMessage = daysUntilStart > 0
+            ? `starts in <strong>${daysUntilStart} day${daysUntilStart > 1 ? 's' : ''}</strong>`
+            : 'starts <strong>today</strong>';
+        const noteMessage = daysUntilStart > 0
+            ? 'Countdown is on—preview Day 1 now and get ready to hit the ground running.'
+            : 'We’re kicking off right now. Open today’s plan and start building momentum. 🚀';
         
         const welcomeMessage = `
             <div class="welcome-overlay" id="welcomeOverlay">
                 <div class="welcome-modal">
                     <h2>🎯 Welcome to Your AI/ML Interview Prep!</h2>
-                    <p>Your 60-day preparation journey starts <strong>tomorrow</strong>!</p>
+                    <p>Your 60-day preparation journey ${startMessage}!</p>
                     <div class="welcome-info">
                         <div class="welcome-item">
                             <span class="welcome-icon">📅</span>
@@ -341,11 +346,7 @@ function showWelcomeIfNeeded() {
                             </div>
                         </div>
                     </div>
-                    <p class="welcome-note">
-                        ${daysUntilStart === 1 ? 
-                            "Starting tomorrow! You can preview Day 1 content now. 🚀" :
-                            "You can preview the content and start early if you'd like!"}
-                    </p>
+                    <p class="welcome-note">${noteMessage}</p>
                     <button id="welcomeStartBtn" class="btn btn-primary btn-large">
                         Let's Get Started! 💪
                     </button>
@@ -771,13 +772,11 @@ function updateDateDisplay() {
     // Calculate days until start or days into plan
     const startDate = new Date(state.startDate);
     startDate.setHours(0, 0, 0, 0);
-    const daysUntilStart = Math.ceil((startDate - today) / (1000 * 60 * 60 * 24));
+    const daysUntilStart = Math.max(0, Math.ceil((startDate - today) / (1000 * 60 * 60 * 24)));
     
     let dateLabel = '';
-    if (daysUntilStart > 0) {
+    if (daysUntilStart > 0 && state.currentDay === 1) {
         dateLabel = `<span class="date-badge date-future">Starts in ${daysUntilStart} day${daysUntilStart > 1 ? 's' : ''}</span>`;
-    } else if (daysUntilStart === 0) {
-        dateLabel = '<span class="date-badge date-today">Starts Tomorrow! 🚀</span>';
     } else if (currentDate.getTime() === today.getTime()) {
         dateLabel = '<span class="date-badge date-today">Today 📍</span>';
     } else if (currentDate < today) {
