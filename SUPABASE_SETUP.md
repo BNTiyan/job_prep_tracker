@@ -56,8 +56,7 @@ nano .env  # or use your favorite editor
 2. Add your credentials:
 
 ```env
-SUPABASE_URL=https://muxgduhfvtzqzoodsvzg.supabase.co
-SUPABASE_ANON_KEY=eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im11eGdkdWhmdnR6cXpvb2RzdnpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM2ODA5OTgsImV4cCI6MjA3OTI1Njk5OH0.T-SvxUGzzqE_9mGGVRqxeH1LnDbop7KdOnXBt7TBXwQ
+
 ```
 
 3. Save the file
