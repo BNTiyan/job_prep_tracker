@@ -6,6 +6,9 @@ let state = {
     reviewNotes: [],
     startDate: getTodayDate(), // Start from today
     practiceProblems: null, // Will load from YAML
+    username: null, // User's name
+    userId: null, // Unique user ID
+    targetCompany: null, // Target company
     learningModel: {
         performanceHistory: [], // Track daily performance
         categoryStrengths: {}, // Track strength in each category
@@ -24,6 +27,20 @@ let state = {
 };
 
 const API_BASE = '/.netlify/functions';
+
+// Generate or retrieve unique user ID
+function getUserId() {
+    let userId = localStorage.getItem('jobPrepUserId');
+    
+    if (!userId) {
+        // Generate a unique ID: timestamp + random string
+        userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('jobPrepUserId', userId);
+        console.log('New user ID generated:', userId);
+    }
+    
+    return userId;
+}
 
 // Get today's date as start date
 function getTodayDate() {
@@ -1524,6 +1541,188 @@ function exportLearningData() {
     alert('📥 Learning data exported successfully! Use this to track your progress over time or share with mentors.');
 }
 
+// ===== USER SETUP FUNCTIONS =====
+
+// Check if user has completed setup
+async function checkUserSetup() {
+    const userId = getUserId();
+    
+    // Check localStorage first
+    const hasSetup = localStorage.getItem('userSetupComplete');
+    
+    if (hasSetup) {
+        // Load from state
+        if (state.username) {
+            showUserInfo();
+            return true;
+        }
+    }
+    
+    // Check database
+    try {
+        const response = await fetch(`${API_BASE}/preferences?userId=${userId}`);
+        if (response.ok) {
+            const prefs = await response.json();
+            if (prefs.user_id && prefs.settings && prefs.settings.username) {
+                // User exists in database
+                state.username = prefs.settings.username;
+                state.targetCompany = prefs.settings.targetCompany;
+                state.startDate = prefs.start_date;
+                state.userId = userId;
+                localStorage.setItem('userSetupComplete', 'true');
+                showUserInfo();
+                return true;
+            }
+        }
+    } catch (error) {
+        console.error('Error checking user setup:', error);
+    }
+    
+    // No setup found, show modal
+    return false;
+}
+
+// Show user setup modal
+function showUserSetupModal() {
+    const modal = document.getElementById('userSetupModal');
+    const form = document.getElementById('userSetupForm');
+    const startDateInput = document.getElementById('startDate');
+    
+    // Set default start date to today
+    const today = new Date().toISOString().split('T')[0];
+    startDateInput.value = today;
+    startDateInput.min = today; // Can't start in the past
+    
+    modal.style.display = 'flex';
+    
+    // Handle form submission
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        await handleUserSetup(form);
+    };
+}
+
+// Handle user setup form submission
+async function handleUserSetup(form) {
+    const formData = new FormData(form);
+    const username = formData.get('username').trim();
+    const startDate = formData.get('startDate');
+    const targetCompany = formData.get('targetCompany').trim();
+    
+    if (!username || !startDate) {
+        alert('Please fill in all required fields');
+        return;
+    }
+    
+    const submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Setting up...';
+    
+    try {
+        const userId = getUserId();
+        
+        // Save to database
+        const response = await fetch(`${API_BASE}/preferences`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userId,
+                startDate,
+                currentDay: 1,
+                settings: {
+                    username,
+                    targetCompany: targetCompany || null,
+                    setupDate: new Date().toISOString()
+                }
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to save user preferences');
+        }
+        
+        // Update state
+        state.username = username;
+        state.startDate = startDate;
+        state.targetCompany = targetCompany;
+        state.userId = userId;
+        state.currentDay = 1;
+        
+        // Save to localStorage
+        localStorage.setItem('userSetupComplete', 'true');
+        saveState();
+        
+        // Hide modal and show user info
+        document.getElementById('userSetupModal').style.display = 'none';
+        showUserInfo();
+        
+        // Recalculate current day based on start date
+        autoAdvanceToToday();
+        updateDateDisplay();
+        renderTasks();
+        
+        // Show welcome message
+        setTimeout(() => {
+            alert(`🎉 Welcome ${username}! Your 60-day journey begins on ${new Date(startDate).toLocaleDateString()}. Let's achieve your goals together!`);
+        }, 500);
+        
+    } catch (error) {
+        console.error('Error setting up user:', error);
+        alert('Failed to complete setup. Please try again.');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-rocket"></i> Start My Journey';
+    }
+}
+
+// Show user info in header
+function showUserInfo() {
+    const userInfo = document.getElementById('userInfo');
+    const usernameDisplay = document.getElementById('usernameDisplay');
+    
+    if (state.username) {
+        usernameDisplay.textContent = state.username;
+        userInfo.style.display = 'flex';
+    }
+}
+
+// Load user preferences from database
+async function loadUserPreferences() {
+    try {
+        const userId = getUserId();
+        const response = await fetch(`${API_BASE}/preferences?userId=${userId}`);
+        
+        if (response.ok) {
+            const prefs = await response.json();
+            if (prefs.settings && prefs.settings.username) {
+                state.username = prefs.settings.username;
+                state.targetCompany = prefs.settings.targetCompany;
+                state.startDate = prefs.start_date;
+                state.currentDay = prefs.current_day || calculateCurrentDay();
+            }
+        }
+    } catch (error) {
+        console.error('Error loading user preferences:', error);
+    }
+}
+
 // Initialize app when DOM is loaded
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', async () => {
+    // Initialize user ID
+    state.userId = getUserId();
+    
+    // Check if user has completed setup
+    const hasSetup = await checkUserSetup();
+    
+    if (!hasSetup) {
+        showUserSetupModal();
+    }
+    
+    // Load user preferences if setup is complete
+    if (hasSetup) {
+        await loadUserPreferences();
+    }
+    
+    // Continue with normal initialization
+    init();
+});
 

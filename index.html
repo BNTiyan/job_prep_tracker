@@ -5,12 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI/ML Interview Prep Tracker - Google</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="user-setup-styles.css">
 </head>
 <body>
+    <!-- First-Time User Setup Modal -->
+    <div id="userSetupModal" class="modal" style="display: none;">
+        <div class="modal-content user-setup">
+            <h2>👋 Welcome to Your Interview Prep Journey!</h2>
+            <p class="setup-intro">Let's get you set up for success. This information will be saved to track your progress.</p>
+            
+            <form id="userSetupForm">
+                <div class="form-group">
+                    <label for="username">
+                        <i class="fas fa-user"></i> Your Name
+                    </label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        placeholder="Enter your name" 
+                        required
+                        autocomplete="name"
+                        minlength="2"
+                        maxlength="50"
+                    >
+                    <small>This helps personalize your experience</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="startDate">
+                        <i class="fas fa-calendar-alt"></i> Start Date
+                    </label>
+                    <input 
+                        type="date" 
+                        id="startDate" 
+                        name="startDate" 
+                        required
+                    >
+                    <small>Choose when you want to begin your 60-day preparation</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="targetCompany">
+                        <i class="fas fa-building"></i> Target Company (Optional)
+                    </label>
+                    <input 
+                        type="text" 
+                        id="targetCompany" 
+                        name="targetCompany" 
+                        placeholder="e.g., Google, Meta, Amazon"
+                        maxlength="50"
+                    >
+                </div>
+
+                <div class="setup-info">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Your data will be securely stored and synced across devices</span>
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-rocket"></i> Start My Journey
+                </button>
+            </form>
+        </div>
+    </div>
+
     <div class="container">
         <header>
-            <h1>🤖 AI/ML Interview Preparation - Google</h1>
-            <p class="subtitle">Your Daily 2-Hour Study Plan - 60 Days to Success</p>
+            <div class="header-content">
+                <div>
+                    <h1>🤖 AI/ML Interview Preparation - Google</h1>
+                    <p class="subtitle">Your Daily 2-Hour Study Plan - 60 Days to Success</p>
+                </div>
+                <div class="user-info" id="userInfo" style="display: none;">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="usernameDisplay"></span>
+                </div>
+            </div>
         </header>
 
         <div class="progress-section">
