@@ -18,7 +18,16 @@ export const handler = async (event) => {
         return errorResponse(500, 'Database not configured');
     }
 
-    const userId = 'default_user'; // You can add auth later
+    // Get user ID from request
+    const userId = (() => {
+        // For POST/PUT requests, get from body
+        if (event.httpMethod === 'POST' || event.httpMethod === 'PUT') {
+            const body = JSON.parse(event.body || '{}');
+            return body.userId || 'default_user';
+        }
+        // For GET requests, get from query params
+        return event.queryStringParameters?.userId || 'default_user';
+    })();
 
     try {
         // GET - Fetch user preferences
