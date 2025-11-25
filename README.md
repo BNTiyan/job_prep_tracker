@@ -14,7 +14,7 @@ This tracker is specifically designed based on your background as a **Cybersecur
 - 🔨 **ML Coding Challenges**: Implement 14+ ML algorithms from scratch (NumPy only!)
 - ✅ **Task Tracking**: Mark tasks as completed and carry over unfinished tasks
 - 📚 **Learning Topics Reference**: Complete categorized list of AI/ML topics to master
-- 📝 **Custom Topics**: Add new topics/skills specific to your learning needs
+- 📝 **Review Notes & Custom Topics**: Capture follow-ups and add new learning items
 - 📊 **Progress Visualization**: Track completion percentage and maintain streaks
 - 💾 **Local Storage**: Your progress is saved in your browser
 - 🎯 **Google AI/ML Focus**: Tailored for Google's ML Engineer interview process
@@ -51,21 +51,63 @@ cd job-prep-tracker
 netlify deploy --prod
 ```
 
+## ☁️ Cloud Sync (Netlify Functions + Postgres)
+
+The tracker now supports an optional cloud backend so your **review notes** and **completed tasks** stay in sync across devices.
+
+1. **Install dependencies**
+   ```bash
+   cd job-prep-tracker
+   npm install
+   ```
+2. **Provision a Postgres database** (Supabase/Neon/Railway all have generous free tiers).
+3. **Set Netlify environment variables** (either a single connection string or discrete values):
+   ```
+   POSTGRES_CONNECTION_STRING=postgres://user:pass@host:5432/dbname
+   # or
+   PGHOST=...
+   PGPORT=5432
+   PGUSER=...
+   PGPASSWORD=...
+   PGDATABASE=...
+   POSTGRES_SSL=true   # set to false only if your provider disables SSL
+   ```
+4. **Deploy to Netlify**. The serverless functions live in `netlify/functions`:
+   - `notes` → `/.netlify/functions/notes` (`GET`, `POST`, `DELETE`)
+   - `tasks` → `/.netlify/functions/tasks` (`GET`, `POST`)
+
+The functions automatically create the required tables:
+
+```sql
+CREATE TABLE IF NOT EXISTS review_notes (
+  id SERIAL PRIMARY KEY,
+  day INTEGER NOT NULL,
+  note_text TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS completed_tasks (
+  task_id TEXT PRIMARY KEY,
+  completed BOOLEAN NOT NULL DEFAULT TRUE,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+```
+
+If the API isn’t reachable (e.g., offline), the tracker gracefully falls back to localStorage so you never lose your daily plan.
+
 ## 📖 Usage
 
 ### First Time Setup
 
 When you first open the app, you'll see a welcome screen that:
-- ✅ Sets your **start date to tomorrow** automatically
+- ✅ Sets your **start date to today** (or a custom date you pick)
 - ✅ Explains the 60-day journey ahead
 - ✅ Shows your daily commitment (2 hours)
 - ✅ Previews what's included
 
-**Why start tomorrow?**
-- Gives you time to mentally prepare
-- Allows you to preview Day 1 content
-- Sets a clear starting point for tracking
-- You can always start early if you want!
+**Prefer a different start day?**
+- Use the welcome screen countdown if you want to schedule your kickoff
+- Preview content ahead of time and start whenever you're ready
 
 ### Main Dashboard
 

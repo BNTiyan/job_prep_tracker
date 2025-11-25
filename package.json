@@ -1,0 +1,13 @@
+{
+  "name": "job-prep-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"No tests yet\""
+  }
+}
+

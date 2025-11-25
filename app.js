@@ -23,6 +23,8 @@ let state = {
     }
 };
 
+const API_BASE = '/.netlify/functions';
+
 // Get today's date as start date
 function getTodayDate() {
     const today = new Date();
@@ -97,6 +99,8 @@ function loadState() {
         if (!state.startDate) {
             state.startDate = getTodayDate();
         }
+    } else {
+        state.reviewNotes = [];
     }
     
     // Auto-advance to today's day if needed
@@ -104,14 +108,16 @@ function loadState() {
 }
 
 // Save state to localStorage
-function saveState() {
+function saveState(skipLearningUpdate = false) {
     localStorage.setItem('googlePrepState', JSON.stringify({
         ...state,
         completedTasks: Array.from(state.completedTasks)
     }));
     
     // Update learning model after each save
-    updateLearningModel();
+    if (!skipLearningUpdate) {
+        updateLearningModel();
+    }
 }
 
 // Update learning model based on daily activities
@@ -289,6 +295,7 @@ function generateAdaptations() {
 async function init() {
     await loadPracticeProblems();
     loadState();
+    await syncStateFromServer();
     
     // Show welcome message for new users
     showWelcomeIfNeeded();
@@ -680,33 +687,42 @@ function renderNotesSection() {
 
     const noteForm = document.getElementById('noteForm');
     if (noteForm) {
-        noteForm.addEventListener('submit', (e) => {
+        noteForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const noteTextEl = document.getElementById('noteText');
             const noteDayEl = document.getElementById('noteDay');
             const noteText = noteTextEl.value.trim();
             if (!noteText) return;
 
-            const note = {
-                id: 'note-' + Date.now(),
-                day: Math.min(Math.max(parseInt(noteDayEl.value, 10) || state.currentDay, 1), 60),
-                text: noteText,
-                createdAt: new Date().toISOString()
-            };
+            const noteDay = Math.min(Math.max(parseInt(noteDayEl.value, 10) || state.currentDay, 1), 60);
+            const savedNote = await createNoteOnServer(noteDay, noteText);
+            if (!savedNote) {
+                alert('Unable to save note. Please try again.');
+                return;
+            }
 
-            state.reviewNotes.push(note);
+            state.reviewNotes.unshift(savedNote);
             noteTextEl.value = '';
-            saveState();
+            saveState(true);
             renderNotesSection();
         });
     }
 
     section.querySelectorAll('.note-delete').forEach(button => {
-        button.addEventListener('click', () => {
+        button.addEventListener('click', async () => {
             const noteId = button.dataset.noteId;
+            const originalNotes = [...state.reviewNotes];
             state.reviewNotes = state.reviewNotes.filter(note => note.id !== noteId);
-            saveState();
             renderNotesSection();
+            saveState(true);
+
+            const success = await deleteNoteFromServer(noteId);
+            if (!success) {
+                alert('Unable to delete note. Restoring previous state.');
+                state.reviewNotes = originalNotes;
+                saveState(true);
+                renderNotesSection();
+            }
         });
     });
 }
@@ -727,6 +743,86 @@ function escapeHtml(text = '') {
         "'": '&#039;'
     };
     return text.replace(/[&<>"']/g, m => map[m]);
+}
+
+async function syncStateFromServer() {
+    if (typeof fetch === 'undefined') return;
+    try {
+        const [notesResponse, tasksResponse] = await Promise.all([
+            fetch(`${API_BASE}/notes`),
+            fetch(`${API_BASE}/tasks`)
+        ]);
+
+        if (notesResponse.ok) {
+            const notes = await notesResponse.json();
+            if (Array.isArray(notes)) {
+                state.reviewNotes = notes.map(normalizeServerNote).filter(Boolean);
+            }
+        }
+
+        if (tasksResponse.ok) {
+            const data = await tasksResponse.json();
+            if (data && Array.isArray(data.completedTaskIds)) {
+                state.completedTasks = new Set(data.completedTaskIds);
+            }
+        }
+
+        saveState(true);
+    } catch (error) {
+        console.warn('Server sync unavailable, falling back to local state.', error);
+    }
+}
+
+function normalizeServerNote(note) {
+    if (!note) return null;
+    return {
+        id: note.id != null ? String(note.id) : `note-${Date.now()}`,
+        day: note.day ?? state.currentDay,
+        text: note.text ?? note.note_text ?? '',
+        createdAt: note.createdAt || note.created_at || new Date().toISOString()
+    };
+}
+
+async function createNoteOnServer(day, text) {
+    try {
+        const response = await fetch(`${API_BASE}/notes`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ day, text })
+        });
+        if (!response.ok) {
+            throw new Error('Failed to save note');
+        }
+        const savedNote = await response.json();
+        return normalizeServerNote(savedNote);
+    } catch (error) {
+        console.error('Unable to save note:', error);
+        return null;
+    }
+}
+
+async function deleteNoteFromServer(noteId) {
+    try {
+        const response = await fetch(`${API_BASE}/notes?id=${encodeURIComponent(noteId)}`, {
+            method: 'DELETE'
+        });
+        return response.ok;
+    } catch (error) {
+        console.error('Unable to delete note:', error);
+        return false;
+    }
+}
+
+async function syncTaskCompletion(taskId, completed) {
+    try {
+        await fetch(`${API_BASE}/tasks`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ taskId, completed })
+        });
+    } catch (error) {
+        console.error('Unable to sync task completion:', error);
+    }
 }
 
 // Get category icon
@@ -957,6 +1053,7 @@ function setupEventListeners() {
             renderTasks();
             updateProgress();
             renderInsights(); // Update AI insights when tasks change
+            syncTaskCompletion(taskId, e.target.checked);
         }
     });
 
