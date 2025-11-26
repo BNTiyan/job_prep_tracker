@@ -1,5 +1,6 @@
 // AI/ML Engineer Interview Preparation Plan (60 days)
 // Tailored for Google AI/ML roles based on your background
+// Includes Cloud Services (AWS & GCP) for MLOps proficiency
 const preparationPlan = [
     // Week 1: ML Fundamentals Review & Python for ML
     {
@@ -8,18 +9,23 @@ const preparationPlan = [
         tasks: [
             {
                 title: "Supervised Learning Review: Linear & Logistic Regression",
-                duration: 60,
+                duration: 50,
                 notes: "Mathematics behind gradient descent, cost functions. Implement from scratch in NumPy."
             },
             {
                 title: "Bias-Variance Tradeoff & Regularization (L1/L2)",
-                duration: 40,
+                duration: 30,
                 notes: "When to use Ridge vs Lasso. Impact on model complexity."
             },
             {
                 title: "Coding: Implement Linear Regression from Scratch",
                 duration: 20,
                 notes: "No sklearn - use only NumPy. Understand matrix operations."
+            },
+            {
+                title: "☁️ AWS Fundamentals: IAM & EC2 Basics",
+                duration: 20,
+                notes: "IAM roles, policies, users. Launch EC2 instance. Security groups. Cost optimization basics."
             }
         ]
     },
@@ -29,18 +35,23 @@ const preparationPlan = [
         tasks: [
             {
                 title: "Decision Trees & Random Forests",
-                duration: 60,
+                duration: 50,
                 notes: "Gini impurity, entropy, information gain. Feature importance. Overfitting prevention."
             },
             {
                 title: "Ensemble Methods: Bagging, Boosting, Stacking",
-                duration: 40,
+                duration: 30,
                 notes: "XGBoost, LightGBM, AdaBoost internals. When to use each."
             },
             {
                 title: "Coding: Implement Decision Tree Classifier",
                 duration: 20,
                 notes: "Recursive splitting algorithm. Practice on Iris dataset."
+            },
+            {
+                title: "☁️ AWS Lambda & Serverless",
+                duration: 20,
+                notes: "Lambda functions basics. Triggers (S3, API Gateway). Use cases for ML inference. Cold start optimization."
             }
         ]
     },
@@ -50,18 +61,23 @@ const preparationPlan = [
         tasks: [
             {
                 title: "Neural Networks Basics: Forward & Backpropagation",
-                duration: 60,
+                duration: 50,
                 notes: "Chain rule, activation functions (ReLU, Sigmoid, Tanh). Vanishing gradient problem."
             },
             {
                 title: "Optimization Algorithms: SGD, Adam, RMSProp",
-                duration: 40,
+                duration: 30,
                 notes: "Learning rate scheduling. Momentum and adaptive learning rates."
             },
             {
                 title: "Implement: Simple Neural Network in NumPy",
                 duration: 20,
                 notes: "2-layer network for XOR problem. Manual backprop calculation."
+            },
+            {
+                title: "☁️ AWS S3 & Data Storage",
+                duration: 20,
+                notes: "S3 buckets, versioning, lifecycle policies. Data lakes. S3 Select. Glacier for archiving. Access patterns for ML datasets."
             }
         ]
     },
@@ -71,18 +87,23 @@ const preparationPlan = [
         tasks: [
             {
                 title: "Convolutional Neural Networks Architecture",
-                duration: 60,
+                duration: 50,
                 notes: "Conv layers, pooling, stride, padding. Parameter calculation. ResNet, VGG, Inception."
             },
             {
                 title: "Transfer Learning & Fine-tuning",
-                duration: 40,
+                duration: 30,
                 notes: "When to freeze layers. Feature extraction vs fine-tuning. ImageNet pretrained models."
             },
             {
                 title: "Code: Fine-tune ResNet on Custom Dataset (PyTorch)",
                 duration: 20,
                 notes: "Use your ADAS camera object detection experience. Practice explaining CV pipeline."
+            },
+            {
+                title: "☁️ AWS Step Functions & Orchestration",
+                duration: 20,
+                notes: "State machines for ML workflows. Error handling, retry logic. Integrate with Lambda, SageMaker. ETL pipeline orchestration."
             }
         ]
     },
@@ -92,18 +113,23 @@ const preparationPlan = [
         tasks: [
             {
                 title: "Object Detection: YOLO, R-CNN Family, SSD",
-                duration: 60,
+                duration: 50,
                 notes: "Anchor boxes, NMS, IoU. Two-stage vs one-stage detectors. Real-time inference."
             },
             {
                 title: "2D to 3D Mapping & Depth Estimation",
-                duration: 40,
+                duration: 30,
                 notes: "Stereo vision, monocular depth. Relate to your Continental ADAS work."
             },
             {
                 title: "Review Week 1: Practice Explaining Your CV Projects",
                 duration: 20,
                 notes: "Continental ADAS camera detection, Kalman filters, 3D mapping - prepare STAR stories."
+            },
+            {
+                title: "☁️ GCP Fundamentals: Cloud Storage & Compute Engine",
+                duration: 20,
+                notes: "GCS buckets, object storage classes. Compute Engine vs App Engine. IAM basics. BigQuery intro."
             }
         ]
     },
@@ -115,18 +141,23 @@ const preparationPlan = [
         tasks: [
             {
                 title: "Recurrent Neural Networks & Sequential Data",
-                duration: 60,
+                duration: 50,
                 notes: "LSTM, GRU architecture. Vanishing gradient in RNNs. Bidirectional RNNs."
             },
             {
                 title: "Sequence-to-Sequence Models & Attention",
-                duration: 40,
+                duration: 30,
                 notes: "Encoder-decoder architecture. Attention mechanism fundamentals."
             },
             {
                 title: "Code: Implement LSTM for Time Series Prediction",
                 duration: 20,
                 notes: "PyTorch LSTM. Stock price or sensor data prediction."
+            },
+            {
+                title: "☁️ AWS Glue & ETL Pipelines",
+                duration: 20,
+                notes: "Glue jobs, crawlers, Data Catalog. ETL transformations. S3 to Redshift. PySpark on Glue."
             }
         ]
     },
@@ -136,13 +167,23 @@ const preparationPlan = [
         tasks: [
             {
                 title: "Transformers Architecture Deep Dive",
-                duration: 70,
+                duration: 50,
                 notes: "Self-attention, multi-head attention, positional encoding. 'Attention is All You Need' paper."
             },
             {
                 title: "BERT, GPT, T5 - Pretrained Models",
-                duration: 50,
+                duration: 30,
                 notes: "Masked LM vs autoregressive. Fine-tuning strategies. Your Vertex AI (Gemini) experience."
+            },
+            {
+                title: "🏗️ System Design: URL Shortener (bit.ly)",
+                duration: 30,
+                notes: "Design components: Hashing, database sharding, rate limiting, caching. Draw architecture diagram. Scalability considerations."
+            },
+            {
+                title: "☁️ AWS SageMaker Basics",
+                duration: 10,
+                notes: "Training jobs, endpoints, model registry. Managed notebooks. Integration with S3."
             }
         ]
     },
@@ -194,18 +235,23 @@ const preparationPlan = [
         tasks: [
             {
                 title: "Prepare STAR Stories for ML Projects",
-                duration: 60,
+                duration: 40,
                 notes: "Beacon AI SAST, Databricks dashboards, ADAS object detection, computational trust research."
             },
             {
                 title: "Google's AI Principles & Responsible AI",
-                duration: 40,
+                duration: 30,
                 notes: "Fairness, explainability, safety. Your AI governance experience at Rivian."
             },
             {
                 title: "Practice: 'Walk me through your ML project' (5 min)",
                 duration: 20,
                 notes: "Record yourself. Problem → Approach → Results → Impact."
+            },
+            {
+                title: "🏗️ System Design: Rate Limiter & API Gateway",
+                duration: 30,
+                notes: "Token bucket vs leaky bucket algorithms. Distributed rate limiting with Redis. API throttling strategies."
             }
         ]
     },
