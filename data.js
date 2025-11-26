@@ -1304,12 +1304,32 @@ const codingPractice = [
     { day: 14, problems: ["Unique Paths (Medium)", "Minimum Path Sum (Medium)", "Dungeon Game (Hard)"], category: "DP - Grid" },
     { day: 15, problems: ["Permutations (Medium)", "Combinations (Medium)", "Subsets (Medium)"], category: "Backtracking" },
     
-    // Continue through all 60 days
-    { day: 20, problems: ["Implement Trie (Medium)", "Word Search II (Hard)", "Design Add Search Words (Medium)"], category: "Trie" },
+    // Week 4-5: Design Problems & Advanced Data Structures
+    { day: 16, problems: ["LRU Cache (Medium)", "LFU Cache (Hard)", "Design HashMap (Easy)"], category: "Cache Design" },
+    { day: 17, problems: ["Min Stack (Medium)", "Max Stack (Hard)", "Design Circular Queue (Medium)"], category: "Stack/Queue Design" },
+    { day: 18, problems: ["Insert Delete GetRandom O(1) (Medium)", "Design HashSet (Easy)", "Design Twitter (Medium)"], category: "Data Structure Design" },
+    { day: 19, problems: ["Time Based Key-Value Store (Medium)", "Snapshot Array (Medium)", "Design File System (Medium)"], category: "Advanced Design" },
+    { day: 20, problems: ["Implement Trie (Prefix Tree) (Medium)", "Word Search II (Hard)", "Design Add and Search Words (Medium)"], category: "Trie/Prefix Tree" },
+    { day: 21, problems: ["Design Search Autocomplete (Hard)", "Replace Words (Medium)", "Longest Word in Dictionary (Medium)"], category: "Trie Applications" },
+    { day: 22, problems: ["Design In-Memory File System (Hard)", "Trie with Map Sum (Medium)", "Prefix and Suffix Search (Hard)"], category: "Advanced Trie" },
+    
+    // Week 5-6
+    { day: 23, problems: ["Top K Frequent Elements (Medium)", "K Closest Points (Medium)", "Sort Characters by Frequency (Medium)"], category: "Heap Fundamentals" },
+    { day: 24, problems: ["Task Scheduler (Medium)", "Reorganize String (Medium)", "Rearrange String k Distance (Hard)"], category: "Heap + Greedy" },
     { day: 25, problems: ["Kth Largest Element (Medium)", "Merge K Sorted Lists (Hard)", "Find Median from Data Stream (Hard)"], category: "Heap/Priority Queue" },
+    { day: 26, problems: ["Smallest Range Covering K Lists (Hard)", "Minimum Cost to Hire K Workers (Hard)", "IPO (Hard)"], category: "Advanced Heap" },
+    { day: 27, problems: ["Design Browser History (Medium)", "Design Hit Counter (Medium)", "Moving Average from Data Stream (Easy)"], category: "Design with Deque" },
+    { day: 28, problems: ["Design Bounded Blocking Queue (Medium)", "Design Phone Directory (Medium)", "Design Tic-Tac-Toe (Medium)"], category: "Design Problems" },
+    
+    // Week 7-8
     { day: 30, problems: ["Sliding Window Maximum (Hard)", "Trapping Rain Water (Hard)", "Largest Rectangle in Histogram (Hard)"], category: "Stack/Queue" },
+    { day: 32, problems: ["Design Skip List (Hard)", "All O'one Data Structure (Hard)", "Design Circular Deque (Medium)"], category: "Advanced Design" },
+    { day: 35, problems: ["Design Excel Sum Formula (Hard)", "Design Snake Game (Medium)", "Design Leaderboard (Medium)"], category: "Complex Design" },
+    { day: 38, problems: ["Design Underground System (Medium)", "Design Parking System (Easy)", "Design Authentication Manager (Medium)"], category: "Real-World Design" },
     { day: 40, problems: ["Median of Two Sorted Arrays (Hard)", "Kth Smallest in BST (Medium)", "Search in Rotated Array (Medium)"], category: "Binary Search" },
+    { day: 45, problems: ["Design Video Sharing Platform (Hard)", "Design Movie Rental System (Hard)", "Design Most Recently Used Queue (Medium)"], category: "System Design Coding" },
     { day: 50, problems: ["Regular Expression Matching (Hard)", "Wildcard Matching (Hard)", "Interleaving String (Hard)"], category: "Advanced DP" },
+    { day: 55, problems: ["LRU Cache with TTL (Hard)", "Design Memory Allocator (Medium)", "Design File Sharing System (Medium)"], category: "Advanced Cache Design" },
     { day: 60, problems: ["Review your top 10 hardest problems"], category: "Final Review" }
 ];
 
@@ -1343,14 +1363,20 @@ const mlCodingChallenges = [
     { day: 8, challenge: "Decision Tree Classifier", implement: "Gini impurity, recursive splitting", language: "Python" },
     { day: 12, challenge: "K-Means Clustering", implement: "Lloyd's algorithm, convergence check", language: "NumPy" },
     { day: 15, challenge: "Neural Network (2-layer)", implement: "Forward pass, backprop, train", language: "NumPy only" },
+    { day: 16, challenge: "Feature Cache with LRU", implement: "Cache computed features, eviction policy", language: "Python" },
     { day: 18, challenge: "Convolutional Layer", implement: "Conv2D forward pass", language: "NumPy" },
+    { day: 20, challenge: "Vocabulary Trie for NLP", implement: "Insert, search, prefix matching for tokenization", language: "Python" },
     { day: 22, challenge: "Attention Mechanism", implement: "Scaled dot-product attention", language: "NumPy or PyTorch" },
     { day: 25, challenge: "Batch Normalization", implement: "Forward and backward pass", language: "NumPy" },
+    { day: 28, challenge: "Model Prediction Cache", implement: "Cache inference results with TTL", language: "Python" },
     { day: 30, challenge: "Adam Optimizer", implement: "Momentum + RMSProp", language: "NumPy" },
+    { day: 32, challenge: "Feature Store with Versioning", implement: "Store, retrieve features by timestamp", language: "Python" },
     { day: 36, challenge: "Backpropagation from Scratch", implement: "Chain rule, computational graph", language: "NumPy" },
     { day: 40, challenge: "Mini-batch SGD with Momentum", implement: "Batch processing, momentum update", language: "NumPy" },
     { day: 45, challenge: "Simple RNN Cell", implement: "Forward pass, BPTT", language: "NumPy" },
-    { day: 50, challenge: "Dropout Layer", implement: "Training vs inference mode", language: "NumPy" }
+    { day: 48, challenge: "Model Registry with Metadata", implement: "Store models, search by tags/metrics", language: "Python" },
+    { day: 50, challenge: "Dropout Layer", implement: "Training vs inference mode", language: "NumPy" },
+    { day: 55, challenge: "Distributed Feature Cache", implement: "Sharding, consistent hashing for features", language: "Python" }
 ];
 
 // Learning topics organized by category
