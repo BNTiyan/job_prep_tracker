@@ -214,18 +214,23 @@ const preparationPlan = [
         tasks: [
             {
                 title: "ML Pipeline Design: Training, Serving, Monitoring",
-                duration: 60,
-                notes: "Feature stores, model registry. Versioning. Online vs offline inference."
+                duration: 45,
+                notes: "Feature stores, model registry. Versioning. Online vs offline inference. CI/CD for ML."
             },
             {
-                title: "MLOps Tools: MLflow, Kubeflow, Vertex AI",
-                duration: 40,
-                notes: "Experiment tracking. Model deployment. A/B testing. Leverage your Databricks experience."
+                title: "MLOps Tools: MLflow, Kubeflow, Vertex AI, SageMaker",
+                duration: 35,
+                notes: "Experiment tracking. Model deployment. A/B testing. Leverage your Databricks + Bosch experience."
             },
             {
                 title: "Review: Your Rivian Databricks Pipelines",
                 duration: 20,
                 notes: "Prepare to discuss: ML-driven reviewer recommendations, anomaly detection, feedback loops."
+            },
+            {
+                title: "☁️ AWS SageMaker Pipelines & Model Registry",
+                duration: 20,
+                notes: "SageMaker Pipelines for ML workflows. Model registry for versioning. Endpoint auto-scaling. Model monitoring."
             }
         ]
     },
@@ -601,22 +606,27 @@ const preparationPlan = [
     },
     {
         day: 27,
-        category: "Distributed ML",
+        category: "Distributed ML & MLOps Infrastructure",
         tasks: [
             {
-                title: "Distributed Training: Horovod, PyTorch DDP",
-                duration: 60,
-                notes: "Parameter servers, ring-allreduce. Gradient synchronization."
+                title: "Distributed Training: Horovod, PyTorch DDP, Ray",
+                duration: 45,
+                notes: "Parameter servers, ring-allreduce. Gradient synchronization. Multi-node training."
             },
             {
                 title: "Spark for ML: MLlib, PySpark",
-                duration: 40,
-                notes: "Large-scale data processing. Distributed feature engineering."
+                duration: 30,
+                notes: "Large-scale data processing. Distributed feature engineering. Delta Lake for ML."
             },
             {
                 title: "Code: Train Model on Multi-GPU Setup",
                 duration: 20,
                 notes: "PyTorch DistributedDataParallel. Measure speedup."
+            },
+            {
+                title: "☁️ Kubernetes for ML: KubeFlow, Seldon Core",
+                duration: 25,
+                notes: "K8s fundamentals for ML. KubeFlow pipelines. Model serving with Seldon. Auto-scaling pods."
             }
         ]
     },
@@ -871,17 +881,22 @@ const preparationPlan = [
     // Week 9-10: Advanced Projects & Case Studies
     {
         day: 41,
-        category: "ML Projects Deep Dive",
+        category: "MLOps Projects & Monitoring",
         tasks: [
             {
                 title: "Build End-to-End ML Project: Image Classification",
-                duration: 70,
+                duration: 50,
                 notes: "Data collection, preprocessing, model training, deployment. Document everything."
             },
             {
                 title: "Add MLOps: CI/CD, Monitoring, Versioning",
-                duration: 50,
+                duration: 40,
                 notes: "GitHub Actions, MLflow, model registry. Production-ready pipeline."
+            },
+            {
+                title: "🔍 Implement Model Monitoring & Drift Detection",
+                duration: 30,
+                notes: "Evidently AI or Whylabs. Monitor data drift, concept drift, model performance degradation. Set up alerts."
             }
         ]
     },
@@ -1303,6 +1318,7 @@ const systemDesignProblems = [
     { day: 7, problem: "Design URL Shortener (bit.ly)", topics: ["Hashing", "Database sharding", "Rate limiting", "Caching"], difficulty: "Medium" },
     { day: 11, problem: "Design Instagram/Twitter Feed", topics: ["Fan-out on write/read", "Timeline generation", "Caching", "CDN"], difficulty: "Medium" },
     { day: 14, problem: "Design Netflix Recommendation System", topics: ["Collaborative filtering", "Matrix factorization", "Real-time updates", "A/B testing"], difficulty: "Hard" },
+    { day: 17, problem: "Design MLOps Platform (Feature Store + Model Registry)", topics: ["Feature engineering pipeline", "Model versioning", "Deployment automation", "Monitoring"], difficulty: "Hard" },
     { day: 19, problem: "Design Google Search (High-Level)", topics: ["Crawling", "Indexing", "Ranking (PageRank)", "Distributed storage"], difficulty: "Hard" },
     { day: 21, problem: "Design YouTube Video Streaming", topics: ["CDN", "Video encoding", "Chunked upload", "View count aggregation"], difficulty: "Hard" },
     { day: 24, problem: "Design Fraud Detection System", topics: ["Real-time ML scoring", "Feature engineering", "Rule engine + ML", "Alert system"], difficulty: "Hard" },
@@ -1312,8 +1328,9 @@ const systemDesignProblems = [
     { day: 35, problem: "Design Ad Click Prediction System", topics: ["Feature store", "Online learning", "CTR modeling", "Real-time bidding"], difficulty: "Hard" },
     { day: 38, problem: "Design Spam Classification (Gmail)", topics: ["Online learning", "Feature extraction", "Adversarial users", "Precision/Recall"], difficulty: "Medium" },
     { day: 40, problem: "Design Voice Assistant (Google Assistant)", topics: ["Speech-to-text", "NLU", "Dialogue management", "Text-to-speech", "Low latency"], difficulty: "Hard" },
+    { day: 42, problem: "Design MLOps CI/CD Pipeline", topics: ["Automated testing", "Model validation", "Canary deployment", "Rollback strategies", "Blue-green deployment"], difficulty: "Hard" },
     { day: 44, problem: "Design Autonomous Driving Perception", topics: ["Sensor fusion", "Real-time CV", "Object tracking", "Path planning", "Safety"], difficulty: "Expert" },
-    { day: 48, problem: "Design Real-Time ML Model Serving", topics: ["Model versioning", "A/B testing", "Canary deployment", "Monitoring"], difficulty: "Hard" },
+    { day: 48, problem: "Design Real-Time ML Model Serving at Scale", topics: ["Model versioning", "A/B testing", "Canary deployment", "Monitoring", "Auto-scaling"], difficulty: "Hard" },
     { day: 52, problem: "Design News Feed Ranking Algorithm", topics: ["ML ranking", "Personalization", "Content moderation", "Diversity"], difficulty: "Hard" },
     { day: 56, problem: "Design Distributed ML Training System", topics: ["Parameter server", "Data parallelism", "Fault tolerance", "GPU scheduling"], difficulty: "Expert" }
 ];
@@ -1375,10 +1392,17 @@ const learningTopics = {
     ],
     "MLOps & Production ML": [
         "ML Pipelines (Training, Serving, Monitoring)",
-        "Feature Stores & Data Versioning",
-        "Model Deployment (TensorFlow Serving, TorchServe)",
-        "Distributed Training (Horovod, PyTorch DDP)",
-        "Model Monitoring & Drift Detection"
+        "CI/CD for ML (Jenkins, GitLab CI, GitHub Actions)",
+        "Feature Stores & Data Versioning (Feast, Tecton)",
+        "Model Deployment (TensorFlow Serving, TorchServe, SageMaker)",
+        "Model Monitoring & Drift Detection (Evidently, Whylabs)",
+        "A/B Testing & Experimentation Platforms",
+        "Model Registry & Version Control (MLflow, Weights & Biases)",
+        "Distributed Training (Horovod, PyTorch DDP, Ray)",
+        "Infrastructure as Code (Terraform, CloudFormation)",
+        "Kubernetes for ML (KubeFlow, Seldon Core)",
+        "Observability (Prometheus, Grafana, CloudWatch)",
+        "Data Quality & Validation (Great Expectations, Deequ)"
     ],
     "ML System Design": [
         "Recommendation Systems (Collaborative Filtering, Content-Based)",
